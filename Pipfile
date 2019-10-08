@@ -10,6 +10,7 @@ python_version = "3.7"
 django = "*"
 python-dotenv = "*"
 django-cors-headers = "*"
+djangorestframework = "*"
 
 [dev-packages]
 django-extensions = "*"
