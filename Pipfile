@@ -11,3 +11,4 @@ django = "*"
 python-dotenv = "*"
 
 [dev-packages]
+django-extensions = "*"
