@@ -8,7 +8,7 @@ BASE_DIR: Path = Path(__file__).parent.parent
 
 SECRET_KEY = 'c65xb(iko8wb)tw0s5+^oov0e2xa6i-ff6sgl*iu8lz^f0ddsw'
 
-DEBUG = True
+DEBUG = env('DEBUG').lower() != 'false'
 
 ALLOWED_HOSTS = []
 
