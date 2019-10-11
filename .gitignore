@@ -3,3 +3,6 @@ __python__
 
 # Database
 /db.sqlite3
+
+# Environment
+/.env
