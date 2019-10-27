@@ -12,6 +12,8 @@ DEBUG = env('DEBUG').lower() != 'false'
 
 ALLOWED_HOSTS = [env('HOST')]
 
+CORS_ORIGIN_WHITELIST = [env('CLIENT_URL')]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
