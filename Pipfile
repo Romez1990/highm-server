@@ -11,5 +11,6 @@ dev = "python manage.py runserver"
 
 [packages]
 django = "*"
+python-dotenv = "*"
 
 [dev-packages]
