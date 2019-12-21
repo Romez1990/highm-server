@@ -1,13 +1,14 @@
 from pathlib import Path
 
+from .env import env
+
 BASE_DIR = Path(__file__).parent.parent
 
 SECRET_KEY = '+jk5sg&s$ibowvurgiq^h0*$f_wjpa$s3h2e28yzw8%wpr^t-^'
 
-DEBUG = True
+DEBUG = env('DEBUG', bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [] if DEBUG else [env('HOST')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
