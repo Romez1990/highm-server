@@ -12,5 +12,6 @@ dev = "python manage.py runserver"
 [packages]
 django = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 
 [dev-packages]

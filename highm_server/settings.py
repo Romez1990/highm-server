@@ -10,6 +10,9 @@ DEBUG = env('DEBUG', bool)
 
 ALLOWED_HOSTS = [] if DEBUG else [env('HOST')]
 
+client_urls = env('CLIENT_URL').split(',')
+CORS_ORIGIN_WHITELIST = [url.strip() for url in client_urls]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -17,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -27,6 +31,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'highm_server.urls'
