@@ -9,5 +9,6 @@ python_version = "3.8"
 [packages]
 django = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 
 [dev-packages]
