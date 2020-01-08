@@ -14,6 +14,7 @@ psycopg2 = "*"
 gunicorn = "*"
 whitenoise = "*"
 djangorestframework = "*"
+django-rest-auth = "*"
 
 [dev-packages]
 pytest = "*"

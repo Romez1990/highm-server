@@ -1,15 +1,31 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import (
+    RetrieveUpdateAPIView,
+)
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from .models import (
+    Profile,
     Group,
 )
 from .serializers import (
+    ProfileSerializer,
     GroupSerializer,
 )
-from .permissions import IsTeacher
+from .permissions import IsAuthenticated, IsTeacher
+
+
+class ProfileView(RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
+    def get_queryset(self):
+        return Profile.objects.none()
 
 
 class GroupViewSet(ModelViewSet):
