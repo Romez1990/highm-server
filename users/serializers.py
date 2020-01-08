@@ -9,12 +9,18 @@ from rest_framework.serializers import (
 )
 from rest_framework.exceptions import ValidationError
 from rest_auth.models import TokenModel
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
+from allauth.utils import email_address_exists
+from allauth.account import app_settings as allauth_settings
 
 from .models import (
+    User,
     Profile,
     Group,
     Student,
     Teacher,
+    UnregisteredUser,
 )
 
 
@@ -120,3 +126,62 @@ class GroupSerializer(ModelSerializer):
         fields = ['name', 'students']
 
     students = StudentSerializer(many=True)
+
+
+class RegistrationUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+
+
+class RegisterSerializer(Serializer):
+    registration_code = CharField(min_length=6, max_length=6)
+    user = RegistrationUserSerializer()
+
+    def validate_registration_code(self, registration_code):
+        try:
+            registration_code_object = UnregisteredUser.objects.get(
+                pk=registration_code)
+        except UnregisteredUser.DoesNotExist:
+            raise ValidationError({
+                'registration_code': ['Wrong registration code.']
+            })
+        return registration_code_object
+
+    def validate_user(self, user):
+        user.email = get_adapter().clean_email(user['email'])
+        user.username = user.email
+        if allauth_settings.UNIQUE_EMAIL:
+            if user.email and email_address_exists(user['email']):
+                raise ValidationError({
+                    'email': [
+                        'A user is already registered with this email address.'
+                    ]
+                })
+        user.password = get_adapter().clean_password(user['password'])
+        return user
+
+    def custom_signup(self, request, user):
+        registration_code = self.validated_data['registration_code']
+        user.first_name = registration_code.first_name
+        user.last_name = registration_code.last_name
+        user.save()
+        Profile.objects.create(user=user)
+        Student.objects.create(user=user, group=registration_code.group)
+        registration_code.delete()
+
+    def get_cleaned_data(self):
+        return {
+            'username': self.validated_data['user']['email'],
+            'email': self.validated_data['user']['email'],
+            'password': self.validated_data['user']['password'],
+        }
+
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        adapter.save_user(request, user, self)
+        self.custom_signup(request, user)
+        setup_user_email(request, user, [])
+        return user

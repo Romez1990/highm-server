@@ -1,3 +1,4 @@
+from random import randint
 from django.db.models import (
     Model,
     CharField,
@@ -56,3 +57,30 @@ class Teacher(Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+
+
+class UnregisteredUser(Model):
+    code = CharField(verbose_name='Code', max_length=7, primary_key=True,
+                     unique=True)
+    first_name = CharField(verbose_name='First name', max_length=50)
+    last_name = CharField(verbose_name='Last name', max_length=50)
+    group = ForeignKey(Group, verbose_name='Group',
+                       related_name='unregistered_students', on_delete=PROTECT,
+                       null=True)
+    is_staff = BooleanField('Is staff')
+    created_at = DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.generate_code()
+        super().save(*args, **kwargs)
+
+    def generate_code(self):
+        while True:
+            code = f'c{str(randint(0, 999_999)).zfill(6)}'
+            if UnregisteredUser.objects.filter(code=code).count() == 0:
+                break
+        self.code = code
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} {self.code}'

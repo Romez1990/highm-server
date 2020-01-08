@@ -5,6 +5,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_auth.registration.views import (
+    RegisterView as BaseRegisterView,
+    VerifyEmailView as BaseVerifyEmailView,
+)
 
 from .models import (
     Profile,
@@ -88,3 +93,13 @@ class GroupViewSet(ModelViewSet):
                 ],
             })
         return super().destroy(*args, **kwargs)
+
+
+class RegisterView(BaseRegisterView):
+    # to avoid csrf failing error
+    authentication_classes = [TokenAuthentication]
+
+
+class VerifyEmailView(BaseVerifyEmailView):
+    # to avoid csrf failing error
+    authentication_classes = [TokenAuthentication]

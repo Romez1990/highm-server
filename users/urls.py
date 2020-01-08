@@ -7,11 +7,16 @@ from .views import (
     StudentViewSet,
     TeacherViewSet,
     GroupViewSet,
+    RegisterView,
+    VerifyEmailView,
 )
 
 urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
+    path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/verify-email/', VerifyEmailView.as_view(), name='verify_email'),
+    path('accounts/', include('allauth.urls')),
 ]
 
 router = SimpleRouter()
