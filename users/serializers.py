@@ -9,6 +9,7 @@ from rest_auth.models import TokenModel
 
 from .models import (
     Profile,
+    Group,
 )
 
 
@@ -40,3 +41,9 @@ class ProfileSerializer(ModelSerializer):
         if user.is_staff:
             return 'teacher'
         return 'student'
+
+
+class GroupSerializer(ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['name']
