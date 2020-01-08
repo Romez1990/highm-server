@@ -9,13 +9,19 @@ from rest_framework.serializers import (
 )
 from rest_framework.exceptions import ValidationError
 from rest_auth.models import TokenModel
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
+from allauth.utils import email_address_exists
+from allauth.account import app_settings as allauth_settings
 
 from .models import (
     Profile,
     Group,
     Student,
     Teacher,
+    UnregisteredUser,
 )
+from .validators import registration_code_validator
 
 
 class UserSerializerMixin(Serializer):
@@ -120,3 +126,64 @@ class GroupSerializer(ModelSerializer):
         fields = ['name', 'students']
 
     students = StudentSerializer(many=True)
+
+
+class RegistrationCodeCheckSerializer(Serializer):
+    registration_code = CharField(min_length=7, max_length=7,
+                                  validators=[registration_code_validator])
+    first_name = CharField(max_length=254)
+    last_name = CharField(max_length=254)
+
+    def validate_registration_code(self, registration_code):
+        try:
+            registration_code_object = UnregisteredUser.objects.get(
+                pk=registration_code)
+        except UnregisteredUser.DoesNotExist:
+            raise ValidationError(['Wrong registration code.'])
+        return registration_code_object
+
+    def validate(self, attrs):
+        registration_code = attrs['registration_code']
+        first_name = attrs['first_name']
+        last_name = attrs['last_name']
+        if registration_code.first_name != first_name or \
+                registration_code.last_name != last_name:
+            raise ValidationError({
+                'names': [
+                    'Names do not match names from registration code.'
+                ]
+            })
+        return attrs
+
+
+class RegisterSerializer(RegistrationCodeCheckSerializer):
+    email = EmailField(max_length=254)
+    password = CharField(max_length=128)
+
+    def validate_email(self, email):
+        clean_email = get_adapter().clean_email(email)
+        if allauth_settings.UNIQUE_EMAIL and email_address_exists(clean_email):
+            raise ValidationError([
+                'A user is already registered with this email address.'
+            ])
+        return clean_email
+
+    def validate_password(self, password):
+        return get_adapter().clean_password(password)
+
+    def get_cleaned_data(self):
+        return {
+            'unregistered_user': self.validated_data['registration_code'],
+            'first_name': self.validated_data['first_name'],
+            'last_name': self.validated_data['last_name'],
+            'email': self.validated_data['email'],
+            'password': self.validated_data['password'],
+        }
+
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        adapter.save_user(request, user, self)
+        setup_user_email(request, user, [])
+        return user
