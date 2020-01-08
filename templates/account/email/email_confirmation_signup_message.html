@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load account %}
+
+{% user_display user as user_display %}
+
+{% autoescape off %}
+  {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+    {{ site_name }}
+    <br>
+    <br>
+    Здравствуйте, вы получаете это письмо потому, что пользователь
+    {{ user_display }} дал вашу почту, чтобы зарегистрировать его аккаунт.
+    <br>
+    <br>
+    Чтобы подтвердить данну электронную почту, перейдите по ссылке
+    <a href="{{ activate_url }}">{{ activate_url }}</a>
+  {% endblocktrans %}
+  <br>
+  <br>
+  {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+    Спасибо!
+    <br>
+    {{ site_domain }}
+  {% endblocktrans %}
+{% endautoescape %}
