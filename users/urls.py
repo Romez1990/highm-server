@@ -5,11 +5,19 @@ from highm_server.settings import DEBUG
 from .views import (
     ProfileView,
     GroupViewSet,
+    LetRegister,
+    RegisterView,
+    VerifyEmailView,
 )
+from .views import GroupViewSet, LetRegister, RegisterView, VerifyEmailView
 
 urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
+    path('auth/let-register/', LetRegister.as_view(), name='let_register'),
+    path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/verify-email/', VerifyEmailView.as_view(), name='verify_email'),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if DEBUG:
