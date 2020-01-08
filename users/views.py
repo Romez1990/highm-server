@@ -1,10 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import (
+    CreateAPIView,
     RetrieveUpdateAPIView,
 )
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.authentication import TokenAuthentication
+from rest_auth.registration.views import (
+    RegisterView as BaseRegisterView,
+    VerifyEmailView as BaseVerifyEmailView,
+)
 
 from .models import (
     Profile,
@@ -13,6 +19,7 @@ from .models import (
 from .serializers import (
     ProfileSerializer,
     GroupSerializer,
+    RegistrationCodeSerializer,
 )
 from .permissions import IsAuthenticated, IsTeacher
 
@@ -43,3 +50,18 @@ class GroupViewSet(ModelViewSet):
             })
         self.perform_destroy(obj)
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+class LetRegister(CreateAPIView):
+    serializer_class = RegistrationCodeSerializer
+    permission_classes = [IsTeacher]
+
+
+class RegisterView(BaseRegisterView):
+    # to avoid csrf failing error
+    authentication_classes = [TokenAuthentication]
+
+
+class VerifyEmailView(BaseVerifyEmailView):
+    # to avoid csrf failing error
+    authentication_classes = [TokenAuthentication]
