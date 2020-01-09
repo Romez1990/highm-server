@@ -6,15 +6,16 @@ from .views import (
     ProfileView,
     GroupViewSet,
     LetRegister,
+    LetRegisterList,
     RegisterView,
     VerifyEmailView,
 )
-from .views import GroupViewSet, LetRegister, RegisterView, VerifyEmailView
 
 urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
     path('auth/let-register/', LetRegister.as_view(), name='let_register'),
+    path('auth/let-register-list/', LetRegisterList.as_view(), name='let_register'),
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('auth/verify-email/', VerifyEmailView.as_view(), name='verify_email'),
     path('accounts/', include('allauth.urls')),
