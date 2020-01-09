@@ -3,7 +3,10 @@ from rest_framework.serializers import (
     Serializer,
     CharField,
     EmailField,
+    ListField,
     SerializerMethodField,
+    HiddenField,
+    CurrentUserDefault,
     ValidationError,
 )
 from rest_auth.models import TokenModel
@@ -69,6 +72,31 @@ class RegistrationCodeSerializer(ModelSerializer):
         registration_code.generate_code()
         registration_code.save()
         return registration_code
+
+
+class RegistrationCodeListField(ListField):
+    first_name = CharField(max_length=50)
+    last_name = CharField(max_length=50)
+
+
+class RegistrationCodeListSerializer(Serializer):
+    group_name = CharField(max_length=30)
+    registration_codes = RegistrationCodeListField(max_length=50)
+
+    def create(self, validated_data):
+        group_name = validated_data['group_name']
+        group = Group.objects.create(name=group_name)
+        registration_codes = []
+        for item in validated_data['registration_codes']:
+            registration_code = RegistrationCode(**item)
+            registration_code.group = group
+            registration_code.generate_code()
+            registration_codes.append(registration_code)
+        RegistrationCode.objects.bulk_create(registration_codes)
+        return validated_data
+
+    def update(self, instance, validated_data):
+        raise NotImplemented('cannot update list')
 
 
 class RegistrationUserSerializer(ModelSerializer):

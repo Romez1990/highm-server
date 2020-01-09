@@ -20,6 +20,7 @@ from .serializers import (
     ProfileSerializer,
     GroupSerializer,
     RegistrationCodeSerializer,
+    RegistrationCodeListSerializer,
 )
 from .permissions import IsAuthenticated, IsTeacher
 
@@ -54,6 +55,11 @@ class GroupViewSet(ModelViewSet):
 
 class LetRegister(CreateAPIView):
     serializer_class = RegistrationCodeSerializer
+    permission_classes = [IsTeacher]
+
+
+class LetRegisterList(CreateAPIView):
+    serializer_class = RegistrationCodeListSerializer
     permission_classes = [IsTeacher]
 
 
