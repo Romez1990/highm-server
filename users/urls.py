@@ -5,8 +5,7 @@ from highm_server.settings import DEBUG
 from .views import (
     ProfileView,
     GroupViewSet,
-    LetRegister,
-    LetRegisterList,
+    RegistrationCodeViewSet,
     RegisterView,
     VerifyEmailView,
 )
@@ -14,8 +13,6 @@ from .views import (
 urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
-    path('auth/let-register/', LetRegister.as_view(), name='let_register'),
-    path('auth/let-register-list/', LetRegisterList.as_view(), name='let_register'),
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('auth/verify-email/', VerifyEmailView.as_view(), name='verify_email'),
     path('accounts/', include('allauth.urls')),
@@ -27,5 +24,7 @@ if DEBUG:
     ]
 
 router = DefaultRouter()
+router.register('auth/registration-code', RegistrationCodeViewSet,
+                basename='registration-code')
 router.register('group', GroupViewSet, basename='group')
 urlpatterns += router.urls
