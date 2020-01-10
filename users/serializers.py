@@ -63,6 +63,15 @@ class GroupSerializer(ModelSerializer):
         return group.students.count() + group.unregistered_students.count()
 
 
+class StudentSerializer(ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['pk', 'first_name', 'last_name']
+
+    first_name = CharField(source='user.first_name')
+    last_name = CharField(source='user.last_name')
+
+
 class RegistrationCodeSerializer(ModelSerializer):
     class Meta:
         model = RegistrationCode
@@ -99,6 +108,18 @@ class RegistrationCodeListSerializer(Serializer):
 
     def update(self, instance, validated_data):
         raise NotImplemented('cannot update list')
+
+
+class GroupDetailsSerializer(ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['pk', 'name', 'students', 'unregistered_students']
+
+    students = StudentSerializer(many=True)
+    unregistered_students = RegistrationCodeSerializer(many=True)
+
+    def get_number_of_students(self, group):
+        return group.students.count()
 
 
 class RegistrationUserSerializer(ModelSerializer):
