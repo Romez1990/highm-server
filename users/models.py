@@ -44,7 +44,8 @@ class RegistrationCode(Model):
     code = CharField(verbose_name='Code', max_length=6, primary_key=True)
     first_name = CharField(verbose_name='First name', max_length=50)
     last_name = CharField(verbose_name='Last name', max_length=50)
-    group = ForeignKey(Group, verbose_name='Group', on_delete=PROTECT)
+    group = ForeignKey(Group, verbose_name='Group',
+                       related_name='unregistered_students', on_delete=PROTECT)
     created_at = DateTimeField(auto_now_add=True)
 
     def generate_code(self):

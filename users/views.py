@@ -19,6 +19,7 @@ from .models import (
 from .serializers import (
     ProfileSerializer,
     GroupSerializer,
+    GroupDetailsSerializer,
     RegistrationCodeSerializer,
     RegistrationCodeListSerializer,
 )
@@ -38,10 +39,20 @@ class ProfileView(RetrieveUpdateAPIView):
 
 class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
-    serializer_class = GroupSerializer
     permission_classes = [IsTeacher]
     lookup_field = 'name'
     lookup_value_regex = '.+'
+    serializer_classes = {
+        'list': GroupSerializer,
+        'create': GroupSerializer,
+        'retrieve': GroupDetailsSerializer,
+        'update': GroupSerializer,
+        'partial_update': GroupSerializer,
+        'destroy': GroupSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes[self.action]
 
     def destroy(self, request, *args, **kwargs):
         obj = self.get_object()
