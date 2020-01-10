@@ -1,11 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.generics import (
-    CreateAPIView,
     RetrieveUpdateAPIView,
 )
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.authentication import TokenAuthentication
 from rest_auth.registration.views import (
     RegisterView as BaseRegisterView,
@@ -15,12 +15,14 @@ from rest_auth.registration.views import (
 from .models import (
     Profile,
     Group,
+    RegistrationCode,
 )
 from .serializers import (
     ProfileSerializer,
     GroupSerializer,
     GroupDetailsSerializer,
     RegistrationCodeSerializer,
+    RegistrationDetailsCodeSerializer,
     RegistrationCodeListSerializer,
 )
 from .permissions import IsAuthenticated, IsTeacher
@@ -64,14 +66,32 @@ class GroupViewSet(ModelViewSet):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-class LetRegister(CreateAPIView):
-    serializer_class = RegistrationCodeSerializer
+class RegistrationCodeViewSet(ModelViewSet):
     permission_classes = [IsTeacher]
+    serializer_classes = {
+        'list': RegistrationCodeSerializer,
+        'create': RegistrationDetailsCodeSerializer,
+        'create_list': RegistrationCodeListSerializer,
+        'retrieve': RegistrationCodeSerializer,
+        'update': RegistrationCodeSerializer,
+        'partial_update': RegistrationCodeSerializer,
+        'destroy': RegistrationCodeSerializer,
+    }
 
+    def get_serializer_class(self):
+        return self.serializer_classes[self.action]
 
-class LetRegisterList(CreateAPIView):
-    serializer_class = RegistrationCodeListSerializer
-    permission_classes = [IsTeacher]
+    def get_queryset(self):
+        return RegistrationCode.objects.filter(group__teacher=self.request.user)
+
+    @action(detail=False, methods=['post'])
+    def create_list(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=HTTP_201_CREATED,
+                        headers=headers)
 
 
 class RegisterView(BaseRegisterView):

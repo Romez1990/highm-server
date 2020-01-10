@@ -78,6 +78,13 @@ class RegistrationCodeSerializer(ModelSerializer):
         fields = ['code', 'first_name', 'last_name']
         read_only_fields = ['code']
 
+
+class RegistrationDetailsCodeSerializer(ModelSerializer):
+    class Meta:
+        model = RegistrationCode
+        fields = ['code', 'first_name', 'last_name', 'group']
+        read_only_fields = ['code']
+
     def create(self, validated_data):
         registration_code = RegistrationCode(**validated_data)
         registration_code.generate_code()
