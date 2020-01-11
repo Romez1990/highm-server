@@ -22,6 +22,9 @@ from .models import (
     Student,
     RegistrationCode,
 )
+from .validators import (
+    group_name_validator,
+)
 
 
 class ProfileSerializer(ModelSerializer):
@@ -58,6 +61,10 @@ class GroupSerializer(ModelSerializer):
         fields = ['name', 'number_of_students']
 
     number_of_students = SerializerMethodField(read_only=True)
+
+    def validate_name(self, data):
+        group_name_validator(data)
+        return data
 
     def get_number_of_students(self, group):
         return group.students.count() + group.unregistered_students.count()
@@ -100,6 +107,10 @@ class RegistrationCodeListField(ListField):
 class RegistrationCodeListSerializer(Serializer):
     group_name = CharField(max_length=30)
     registration_codes = RegistrationCodeListField(max_length=50)
+
+    def validate_group_name(self, data):
+        group_name_validator(data)
+        return data
 
     def create(self, validated_data):
         group_name = validated_data['group_name']
