@@ -70,6 +70,39 @@ class GroupSerializer(ModelSerializer):
         return group.students.count() + group.unregistered_students.count()
 
 
+class RegistrationCodeListField(ListField):
+    first_name = CharField(max_length=50)
+    last_name = CharField(max_length=50)
+
+
+class GroupCreateSerializer(Serializer):
+    group_name = CharField(max_length=30)
+    registration_codes = RegistrationCodeListField(max_length=50,
+                                                   required=False)
+    teacher = HiddenField(default=CurrentUserDefault())
+
+    def validate_group_name(self, data):
+        group_name_validator(data)
+        return data
+
+    def create(self, validated_data):
+        group_name = validated_data['group_name']
+        group = Group.objects.create(name=group_name,
+                                     teacher=validated_data['teacher'])
+        registration_codes = []
+        if 'registration_codes' in validated_data:
+            for item in validated_data['registration_codes']:
+                registration_code = RegistrationCode(**item)
+                registration_code.group = group
+                registration_code.generate_code()
+                registration_codes.append(registration_code)
+            RegistrationCode.objects.bulk_create(registration_codes)
+        return validated_data
+
+    def update(self, instance, validated_data):
+        raise NotImplemented('cannot update list')
+
+
 class StudentSerializer(ModelSerializer):
     class Meta:
         model = Student
