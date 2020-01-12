@@ -4,6 +4,7 @@ from rest_framework.routers import SimpleRouter
 from highm_server.settings import DEBUG
 from .views import (
     ProfileView,
+    StudentViewSet,
     GroupViewSet,
 )
 
@@ -13,6 +14,7 @@ urlpatterns = [
 ]
 
 router = SimpleRouter()
+router.register('student', StudentViewSet, basename='student')
 router.register('group', GroupViewSet, basename='group')
 urlpatterns += router.urls
 
