@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'users',
+    'lessons',
 ]
 
 MIDDLEWARE = [
