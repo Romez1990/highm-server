@@ -16,5 +16,6 @@ whitenoise = "*"
 djangorestframework = "*"
 django-rest-auth = "*"
 django-allauth = "*"
+numpy = "*"
 
 [dev-packages]
