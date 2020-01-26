@@ -36,6 +36,15 @@ class Student(Model):
     group = ForeignKey(Group, verbose_name='Group', related_name='students',
                        on_delete=PROTECT)
 
+    @property
+    def n(self):
+        students = self.group.students.order_by('user__first_name',
+                                                'user__last_name')
+        for index, student in enumerate(students):
+            if student == self:
+                return index + 1
+        raise ValueError('what a hell is going on here???')
+
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
