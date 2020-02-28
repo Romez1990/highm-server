@@ -175,7 +175,7 @@
                 "sha256:f254bfd0c970d64ccbb6c9ebef3667ab301a71473569c991253a481f1c98dddc"
             ],
             "index": "pypi",
-            "version": "==0.10.3"
+            "version": "==0.10.5"
         },
         "python3-openid": {
             "hashes": [
