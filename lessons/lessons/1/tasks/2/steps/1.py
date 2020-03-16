@@ -1,13 +1,10 @@
 from typing import List
-from numpy import array, dot
+from numpy import array, power
 
 
 def check(task):
-    return task.product == get_product(task.matrix_a, task.matrix_b)
+    return task.product == get_product(task.matrix_a)
 
 
-def get_product(
-        a: List[List[int]],
-        b: List[List[int]]
-) -> List[List[int]]:
-    return dot(array(a), array(b)).tolist()
+def get_product(a: List[List[int]]) -> List[List[int]]:
+    return power(array(a), 3).tolist()

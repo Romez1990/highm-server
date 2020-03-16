@@ -30,3 +30,4 @@ class TaskResultSerializer(Serializer):
     user = HiddenField(default=CurrentUserDefault())
     n = IntegerField(source='user.student.n', read_only=True)
     product = ListField(child=ListField(child=IntegerField()))
+    trace = IntegerField()

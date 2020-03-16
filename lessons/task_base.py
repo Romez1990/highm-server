@@ -8,9 +8,5 @@ class TaskBase:
     text: str = 'None'
     steps: List = []
 
-    def check(self):
-        for index, step in enumerate(self.steps):
-            result = step.check(self)
-            if not result:
-                return index
-        return True
+    def check(self) -> bool:
+        return all([step.check(self) for step in self.steps])

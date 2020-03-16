@@ -20,10 +20,10 @@ class Task(TaskBase):
         self.product = product
 
 
-# answer = {
-#     "which_of_products": "AB",
-#     "product": [
-#         [-4, 1, 4],
-#         [-12, 3, 13]
-#     ]
-# }
+answer = {
+    "which_of_products": "AB",
+    "product": [
+        [-4, 1, 4],
+        [-12, 3, 13]
+    ]
+}
