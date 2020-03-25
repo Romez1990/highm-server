@@ -3,31 +3,24 @@ from rest_framework.serializers import Serializer
 from rest_framework.fields import (
     CharField,
     IntegerField,
-    ChoiceField,
     ListField,
-    HiddenField,
-    CurrentUserDefault,
     SerializerMethodField,
 )
 
+from lessons.utils.serializer_utils import get_n, StudentNDefault
 from .given import get_matrix_a
-
-
-def get_n(request) -> int:
-    return request.user.student.n
 
 
 class TaskGivenSerializer(Serializer):
     text = CharField()
     matrix_a = SerializerMethodField()
 
-    def get_matrix_a(self, task) -> List[List[int]]:
+    def get_matrix_a(self, _) -> List[List[int]]:
         n = get_n(self.context['request'])
         return get_matrix_a(n)
 
 
 class TaskResultSerializer(Serializer):
-    user = HiddenField(default=CurrentUserDefault())
-    n = IntegerField(source='user.student.n', read_only=True)
+    n = IntegerField(default=StudentNDefault())
     product = ListField(child=ListField(child=IntegerField()))
     trace = IntegerField()

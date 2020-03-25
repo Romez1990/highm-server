@@ -15,12 +15,3 @@ class Task(TaskBase):
         self.matrix_a = get_matrix_a(self.n)
         self.product = product
         self.trace = trace
-
-
-answer = {
-    "product": [
-        [-4, 1],
-        [-12, 3]
-    ],
-    "trace": "20",
-}

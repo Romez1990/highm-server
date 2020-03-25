@@ -5,16 +5,11 @@ from rest_framework.fields import (
     IntegerField,
     ChoiceField,
     ListField,
-    HiddenField,
-    CurrentUserDefault,
     SerializerMethodField,
 )
 
+from lessons.utils.serializer_utils import get_n, StudentNDefault
 from .given import get_matrix_a, get_matrix_b
-
-
-def get_n(request) -> int:
-    return request.user.student.n
 
 
 class TaskGivenSerializer(Serializer):
@@ -32,7 +27,6 @@ class TaskGivenSerializer(Serializer):
 
 
 class TaskResultSerializer(Serializer):
-    user = HiddenField(default=CurrentUserDefault())
-    n = IntegerField(source='user.student.n', read_only=True)
+    n = IntegerField(default=StudentNDefault())
     which_of_products = ChoiceField(['AB', 'BA'])
     product = ListField(child=ListField(child=IntegerField()))

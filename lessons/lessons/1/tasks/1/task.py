@@ -11,19 +11,14 @@ class Task(TaskBase):
     text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
            '<formula>BA</formula>, которое существует:'
 
-    def __init__(self, n: int, which_of_products: str,
-                 product: List[List[int]]) -> None:
+    def __init__(
+        self,
+        n: int,
+        which_of_products: str,
+        product: List[List[int]]
+    ) -> None:
         self.n = n
         self.matrix_a = get_matrix_a(self.n)
         self.matrix_b = get_matrix_b(self.n)
         self.which_of_products = which_of_products
         self.product = product
-
-
-answer = {
-    "which_of_products": "AB",
-    "product": [
-        [-4, 1, 4],
-        [-12, 3, 13]
-    ]
-}
