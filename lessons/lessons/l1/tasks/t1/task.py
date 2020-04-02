@@ -18,6 +18,8 @@ class Task(TaskBase):
         product: List[List[int]]
     ) -> None:
         self.n = n
+        self.text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
+                    '<formula>BA</formula>, которое существует: '
         self.matrix_a = get_matrix_a(self.n)
         self.matrix_b = get_matrix_b(self.n)
         self.which_of_products = which_of_products

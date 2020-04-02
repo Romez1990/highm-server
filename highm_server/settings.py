@@ -1,6 +1,9 @@
 from pathlib import Path
 
+from lessons.load import load_lessons
 from .env import env
+
+load_lessons()
 
 BASE_DIR = Path(__file__).parent.parent
 

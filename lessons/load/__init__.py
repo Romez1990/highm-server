@@ -1,1 +1,6 @@
-from .load import lessons, get_lesson, get_task
+from .load import (
+    load as load_lessons,
+    lessons,
+    get_lesson,
+    get_task,
+)

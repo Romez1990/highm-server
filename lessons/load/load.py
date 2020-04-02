@@ -45,7 +45,12 @@ def load_steps(lesson_dir: Path, task_dir: Path) -> List:
     return steps
 
 
-lessons = load_lessons()
+lessons: List = None
+
+
+def load() -> None:
+    global lessons
+    lessons = load_lessons()
 
 
 def get_lesson(pk: str):

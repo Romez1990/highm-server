@@ -1,5 +1,6 @@
 from typing import List
-from numpy import array, power
+from numpy import array
+from numpy.linalg import matrix_power
 
 
 def check(task):
@@ -7,4 +8,4 @@ def check(task):
 
 
 def get_product(a: List[List[int]]) -> List[List[int]]:
-    return power(array(a), 3).tolist()
+    return matrix_power(array(a), 3).tolist()
