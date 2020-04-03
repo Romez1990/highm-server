@@ -5,9 +5,10 @@ from rest_framework.serializers import (
     ListField,
     SerializerMethodField,
 )
+from rest_framework.utils.serializer_helpers import ReturnDict
 
-from .lesson_base import LessonBase
-from .task_base import TaskBase
+from lessons.utils.serializer import get_n
+from lessons.base import LessonBase
 
 
 class LessonSerializer(Serializer):
@@ -19,9 +20,10 @@ class LessonDetailsSerializer(Serializer):
     goals = ListField(child=CharField(max_length=300))
     tasks = SerializerMethodField()
 
-    def get_tasks(self, lesson: LessonBase) -> List[TaskBase]:
-        tasks: List[TaskBase] = []
-        for task in lesson.tasks:
-            serializer = task.given_serializer(task, context=self.context)
+    def get_tasks(self, lesson: LessonBase) -> List[ReturnDict]:
+        n = get_n(self)
+        tasks: List[ReturnDict] = []
+        for Task in lesson.tasks:
+            serializer = Task.serializer(Task(n), context=self.context)
             tasks.append(serializer.data)
         return tasks

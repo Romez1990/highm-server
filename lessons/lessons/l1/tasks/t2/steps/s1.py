@@ -1,11 +1,12 @@
-from typing import List
 from numpy import array
 from numpy.linalg import matrix_power
 
+from lessons.base import StepBase
+from ..task_answer import TaskAnswer
 
-def check(task):
-    return task.product == get_product(task.matrix_a)
 
-
-def get_product(a: List[List[int]]) -> List[List[int]]:
-    return matrix_power(array(a), 3).tolist()
+class Step(StepBase):
+    def check(self, task_answer: TaskAnswer) -> bool:
+        a = array(task_answer.task.matrix_a)
+        product = matrix_power(a, 3)
+        return task_answer.product == product.tolist()

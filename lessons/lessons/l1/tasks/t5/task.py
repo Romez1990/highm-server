@@ -1,7 +1,7 @@
 from rest_framework.fields import IntegerField
 
 from lessons.utils.serializer import MatrixField
-from lessons.utils.math import MatrixInt
+from lessons.utils.math import MatrixStr
 from lessons.base import TaskBase, TaskSerializerBase
 
 
@@ -14,13 +14,14 @@ class Task(TaskBase):
 
     def __init__(self, n: int) -> None:
         super().__init__(n)
-        self.matrix_a = self._get_matrix_a(self.n)
+        self.equation = self._get_equation(self.n)
 
     def _get_text(self) -> str:
-        return 'Найти матрицу <formula>A^3</formula> и её след:'
+        return 'Решить уравнение:'
 
-    def _get_matrix_a(self, n: int) -> MatrixInt:
+    def _get_equation(self, _: int) -> MatrixStr:
         return [
-            [1, -2],
-            [n - 10, -4],
+            ['1', '1', '1'],
+            ['1', '1-x', '1'],
+            ['1', '1', '2-x'],
         ]

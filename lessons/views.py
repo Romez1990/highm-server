@@ -1,22 +1,25 @@
+from typing import Type
 from django.http import Http404
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 
 from users.permissions import IsStudent
+from .base import TaskAnswerBase
 from .serializers import LessonSerializer, LessonDetailsSerializer
-from .load import lessons, get_lesson
+from .load import get_lessons, get_lesson
 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
-def lesson_list(request):
-    serializer = LessonSerializer(lessons, many=True)
+def lesson_list(request: Request) -> Response:
+    serializer = LessonSerializer(get_lessons(), many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
-def lesson_retrieve(request, lesson_pk):
+def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
     try:
         lesson = get_lesson(lesson_pk)
     except ValueError:
@@ -27,21 +30,25 @@ def lesson_retrieve(request, lesson_pk):
 
 @api_view(['POST'])
 @permission_classes([IsStudent])
-def lesson_check(request, lesson_pk):
+def lesson_check(request, lesson_pk: int) -> Response:
     try:
         lesson = get_lesson(lesson_pk)
     except ValueError:
         raise Http404()
     return Response(
-        [check_task(Task, request, index)
-         for index, Task in enumerate(lesson.tasks)]
+        [check_task(TaskAnswer, request, index)
+         for index, TaskAnswer in enumerate(lesson.task_answers)]
     )
 
 
-def check_task(Task, request, index):
-    result_serializer = Task.result_serializer(data=request.data[index],
-                                               context={'request': request})
-    if not result_serializer.is_valid():
-        return result_serializer.errors
-    task = Task(**result_serializer.data)
-    return task.check()
+def check_task(
+    task_answer_type: Type[TaskAnswerBase],
+    request: Request,
+    index: int,
+) -> bool:
+    serializer = task_answer_type.serializer(data=request.data[index],
+                                             context={'request': request})
+    if not serializer.is_valid():
+        return serializer.errors
+    task_answer = task_answer_type(**serializer.data)
+    return task_answer.check()

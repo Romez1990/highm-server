@@ -1,26 +1,35 @@
-from typing import List
+from rest_framework.fields import IntegerField
 
-from lessons.task_base import TaskBase
-from .serializer import TaskGivenSerializer, TaskResultSerializer
-from .given import get_matrix_a, get_matrix_b
+from lessons.utils.math import MatrixInt
+from lessons.base import TaskBase, TaskSerializerBase
+from lessons.utils.serializer import MatrixField
+
+
+class TaskSerializer(TaskSerializerBase):
+    matrix_a = MatrixField(child=IntegerField())
+    matrix_b = MatrixField(child=IntegerField())
 
 
 class Task(TaskBase):
-    given_serializer = TaskGivenSerializer
-    result_serializer = TaskResultSerializer
-    text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
-           '<formula>BA</formula>, которое существует:'
+    serializer = TaskSerializer
 
-    def __init__(
-        self,
-        n: int,
-        which_of_products: str,
-        product: List[List[int]]
-    ) -> None:
-        self.n = n
-        self.text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
-                    '<formula>BA</formula>, которое существует: '
-        self.matrix_a = get_matrix_a(self.n)
-        self.matrix_b = get_matrix_b(self.n)
-        self.which_of_products = which_of_products
-        self.product = product
+    def __init__(self, n: int) -> None:
+        super().__init__(n)
+        self.matrix_a = self._get_matrix_a(n)
+        self.matrix_b = self._get_matrix_b(n)
+
+    def _get_text(self) -> str:
+        return 'Найти то из произведений матриц <formula>AB</formula> и ' \
+               '<formula>BA</formula>, которое существует: '
+
+    def _get_matrix_a(self, n: int) -> MatrixInt:
+        return [
+            [1, n],
+            [3, 4],
+        ]
+
+    def _get_matrix_b(self, n: int) -> MatrixInt:
+        return [
+            [n - 5, 1, 3],
+            [0, 0, 1],
+        ]

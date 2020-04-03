@@ -1,4 +1,4 @@
-from lessons.lesson_base import LessonBase
+from lessons.base import LessonBase
 
 
 class Lesson(LessonBase):
