@@ -12,7 +12,5 @@ class TaskBase:
 
     def __init__(self, n: int) -> None:
         self.n = n
-        self.text = self._get_text()
 
-    def _get_text(self) -> str:
-        raise NotImplementedError
+    text = 'None'

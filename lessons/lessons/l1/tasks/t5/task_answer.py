@@ -11,9 +11,9 @@ class TaskResultSerializer(TaskAnswerSerializerBase):
 
 class TaskAnswer(TaskAnswerBase):
     serializer = TaskResultSerializer
+    task_type = Task
 
     def __init__(self, n: int, x1: int, x2: int) -> None:
         super().__init__(n)
-        self.task = Task(n)
         self.x1 = x1
         self.x2 = x2

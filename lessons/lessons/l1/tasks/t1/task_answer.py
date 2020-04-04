@@ -16,6 +16,7 @@ class TaskResultSerializer(TaskAnswerSerializerBase):
 
 class TaskAnswer(TaskAnswerBase):
     serializer = TaskResultSerializer
+    task_type = Task
 
     def __init__(
         self,
@@ -24,6 +25,5 @@ class TaskAnswer(TaskAnswerBase):
         product: MatrixInt,
     ) -> None:
         super().__init__(n)
-        self.task = Task(n)
         self.which_of_products = which_of_products
         self.product = product

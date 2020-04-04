@@ -13,14 +13,11 @@ class TaskSerializer(TaskSerializerBase):
 class Task(TaskBase):
     serializer = TaskSerializer
 
-    def __init__(self, n: int) -> None:
-        super().__init__(n)
-        self.matrix_a = self._get_matrix_a(self.n)
+    text = 'Вычислить определитель матрицы четвёртого порядка:'
 
-    def _get_text(self) -> str:
-        return 'Вычислить определитель матрицы четвёртого порядка:'
-
-    def _get_matrix_a(self, n: int) -> MatrixInt:
+    @property
+    def matrix_a(self) -> MatrixInt:
+        n = self.n
         return [
             [0, 1, 1, n - 10],
             [1, 0, 1, 1],

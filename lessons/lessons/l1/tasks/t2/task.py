@@ -12,14 +12,11 @@ class TaskSerializer(TaskSerializerBase):
 class Task(TaskBase):
     serializer = TaskSerializer
 
-    def __init__(self, n: int) -> None:
-        super().__init__(n)
-        self.matrix_a = self._get_matrix_a(self.n)
+    text = 'Найти матрицу <formula>A^3</formula> и её след:'
 
-    def _get_text(self) -> str:
-        return 'Найти матрицу <formula>A^3</formula> и её след:'
-
-    def _get_matrix_a(self, n: int) -> MatrixInt:
+    @property
+    def matrix_a(self) -> MatrixInt:
+        n = self.n
         return [
             [1, -2],
             [n - 10, -4],

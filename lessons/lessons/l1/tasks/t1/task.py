@@ -13,22 +13,20 @@ class TaskSerializer(TaskSerializerBase):
 class Task(TaskBase):
     serializer = TaskSerializer
 
-    def __init__(self, n: int) -> None:
-        super().__init__(n)
-        self.matrix_a = self._get_matrix_a(n)
-        self.matrix_b = self._get_matrix_b(n)
+    text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
+           '<formula>BA</formula>, которое существует: '
 
-    def _get_text(self) -> str:
-        return 'Найти то из произведений матриц <formula>AB</formula> и ' \
-               '<formula>BA</formula>, которое существует: '
-
-    def _get_matrix_a(self, n: int) -> MatrixInt:
+    @property
+    def matrix_a(self) -> MatrixInt:
+        n = self.n
         return [
             [1, n],
             [3, 4],
         ]
 
-    def _get_matrix_b(self, n: int) -> MatrixInt:
+    @property
+    def matrix_b(self) -> MatrixInt:
+        n = self.n
         return [
             [n - 5, 1, 3],
             [0, 0, 1],
