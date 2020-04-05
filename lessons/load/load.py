@@ -1,6 +1,6 @@
 from pathlib import Path
 from importlib import import_module
-from typing import List, Tuple, Type
+from typing import List, Tuple, Type, Optional
 
 from lessons.base import LessonBase, TaskBase, TaskAnswerBase, StepBase
 
@@ -69,28 +69,28 @@ def get_lessons() -> List[Type[LessonBase]]:
     return global_lessons
 
 
-def get_lesson(pk: int) -> Type[LessonBase]:
+def get_lesson(pk: int) -> Optional[Type[LessonBase]]:
     index = pk - 1
-    try:
-        lesson_info = global_lessons[index]
-    except IndexError:
-        raise ValueError()
+    if index >= len(global_lessons):
+        return None
+    lesson_info = global_lessons[index]
     return lesson_info
 
 
-def get_task(lesson: LessonBase, pk: int) -> Type[TaskBase]:
+def get_task(lesson: LessonBase, pk: int) -> Optional[Type[TaskBase]]:
     index = pk - 1
-    try:
-        task = lesson.tasks[index]
-    except IndexError:
-        raise ValueError()
+    if index >= len(lesson.tasks):
+        return None
+    task = lesson.tasks[index]
     return task
 
 
-def get_task_answer(lesson: LessonBase, pk: int) -> Type[TaskAnswerBase]:
+def get_task_answer(
+    lesson: LessonBase,
+    pk: int,
+) -> Optional[Type[TaskAnswerBase]]:
     index = pk - 1
-    try:
-        task_answer = lesson.task_answers[index]
-    except IndexError:
-        raise ValueError()
+    if index >= len(lesson.task_answers):
+        return None
+    task_answer = lesson.task_answers[index]
     return task_answer

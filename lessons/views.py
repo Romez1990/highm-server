@@ -20,9 +20,8 @@ def lesson_list(request: Request) -> Response:
 @api_view(['GET'])
 @permission_classes([IsStudent])
 def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
-    try:
-        lesson = get_lesson(lesson_pk)
-    except ValueError:
+    lesson = get_lesson(lesson_pk)
+    if lesson is None:
         raise Http404()
     serializer = LessonDetailsSerializer(lesson, context={'request': request})
     return Response(serializer.data)
@@ -31,9 +30,8 @@ def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
 @api_view(['POST'])
 @permission_classes([IsStudent])
 def lesson_check(request, lesson_pk: int) -> Response:
-    try:
-        lesson = get_lesson(lesson_pk)
-    except ValueError:
+    lesson = get_lesson(lesson_pk)
+    if lesson is None:
         raise Http404()
     return Response(
         [check_task(TaskAnswer, request, index)
