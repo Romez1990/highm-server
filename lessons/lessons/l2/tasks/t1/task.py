@@ -1,8 +1,8 @@
 from typing import List
 from rest_framework.fields import IntegerField
 
-from lessons.utils.math import MatrixInt
 from lessons.base import TaskBase, TaskSerializerBase
+from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 

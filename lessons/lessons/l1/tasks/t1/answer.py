@@ -3,9 +3,9 @@ from rest_framework.fields import (
     IntegerField,
 )
 
+from lessons.base import AnswerBase, AnswerSerializerBase
 from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
-from lessons.base import AnswerBase, AnswerSerializerBase
 from .task import Task
 
 

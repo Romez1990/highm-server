@@ -1,9 +1,8 @@
 from rest_framework.fields import IntegerField
 
-from lessons.base.task import TaskSerializerBase
-from lessons.utils.serializer import MatrixField
+from lessons.base import TaskBase, TaskSerializerBase
 from lessons.utils.math import MatrixInt
-from lessons.base import TaskBase
+from lessons.utils.serializer import MatrixField
 
 
 class TaskSerializer(TaskSerializerBase):
