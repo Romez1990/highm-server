@@ -9,12 +9,12 @@ if TYPE_CHECKING:
     from .step import StepBase
 
 
-class TaskAnswerSerializerBase(Serializer):
+class AnswerSerializerBase(Serializer):
     n = StudentNField()
 
 
-class TaskAnswerBase:
-    serializer: Type[TaskAnswerSerializerBase]
+class AnswerBase:
+    serializer: Type[AnswerSerializerBase]
     steps: List[StepBase] = []
     task_type: Type[TaskBase]
 

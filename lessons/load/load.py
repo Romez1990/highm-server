@@ -2,7 +2,7 @@ from pathlib import Path
 from importlib import import_module
 from typing import List, Tuple, Type, Optional
 
-from lessons.base import LessonBase, TaskBase, TaskAnswerBase, StepBase
+from lessons.base import LessonBase, TaskBase, AnswerBase, StepBase
 
 
 def load_lessons() -> List[LessonBase]:
@@ -15,32 +15,32 @@ def load_lessons() -> List[LessonBase]:
         lesson_module = import_module(
             f'lessons.lessons.{lesson_dir.name}.lesson')
         lesson = lesson_module.Lesson
-        lesson.tasks, lesson.task_answers = \
-            load_tasks_and_task_answers(lesson_dir)
+        lesson.tasks, lesson.answers = \
+            load_tasks_and_answers(lesson_dir)
         lessons.append(lesson)
     return lessons
 
 
-def load_tasks_and_task_answers(
+def load_tasks_and_answers(
     lesson_dir: Path
-) -> Tuple[List[TaskBase], List[TaskAnswerBase]]:
+) -> Tuple[List[TaskBase], List[AnswerBase]]:
     tasks = []
-    task_answers = []
+    answers = []
     tasks_dir = lesson_dir / 'tasks'
     for task_dir in tasks_dir.iterdir():
         if task_dir.name.startswith('_'):
             continue
         task_module = import_module(
             f'lessons.lessons.{lesson_dir.name}.tasks.{task_dir.name}.task')
-        task_answer_module = import_module(
+        answer_module = import_module(
             f'lessons.lessons.{lesson_dir.name}.tasks.{task_dir.name}.'
-            f'task_answer')
+            f'answer')
         task = task_module.Task
-        task_answer = task_answer_module.TaskAnswer
-        task_answer.steps = load_steps(lesson_dir, task_dir)
+        answer = answer_module.Answer
+        answer.steps = load_steps(lesson_dir, task_dir)
         tasks.append(task)
-        task_answers.append(task_answer)
-    return tasks, task_answers
+        answers.append(answer)
+    return tasks, answers
 
 
 def load_steps(lesson_dir: Path, task_dir: Path) -> List[StepBase]:
@@ -85,12 +85,12 @@ def get_task(lesson: LessonBase, pk: int) -> Optional[Type[TaskBase]]:
     return task
 
 
-def get_task_answer(
+def get_answer(
     lesson: LessonBase,
     pk: int,
-) -> Optional[Type[TaskAnswerBase]]:
+) -> Optional[Type[AnswerBase]]:
     index = pk - 1
-    if index >= len(lesson.task_answers):
+    if index >= len(lesson.answers):
         return None
-    task_answer = lesson.task_answers[index]
-    return task_answer
+    answer = lesson.answers[index]
+    return answer

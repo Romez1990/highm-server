@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from users.permissions import IsStudent
-from .base import TaskAnswerBase
+from .base import AnswerBase
 from .serializers import LessonSerializer, LessonDetailsSerializer
 from .load import get_lessons, get_lesson
 
@@ -34,19 +34,19 @@ def lesson_check(request, lesson_pk: int) -> Response:
     if lesson is None:
         raise Http404()
     return Response(
-        [check_task(TaskAnswer, request, index)
-         for index, TaskAnswer in enumerate(lesson.task_answers)]
+        [check_task(Answer, request, index)
+         for index, Answer in enumerate(lesson.answers)]
     )
 
 
 def check_task(
-    task_answer_type: Type[TaskAnswerBase],
+    answer_type: Type[AnswerBase],
     request: Request,
     index: int,
 ) -> bool:
-    serializer = task_answer_type.serializer(data=request.data[index],
+    serializer = answer_type.serializer(data=request.data[index],
                                              context={'request': request})
     if not serializer.is_valid():
         return serializer.errors
-    task_answer = task_answer_type(**serializer.data)
-    return task_answer.check()
+    answer = answer_type(**serializer.data)
+    return answer.check()

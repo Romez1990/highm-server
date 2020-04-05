@@ -1,5 +1,5 @@
 from lessons.load import load_lessons
-from lessons.lessons.l1.tasks.t2.task_answer import TaskAnswer
+from lessons.lessons.l1.tasks.t2.answer import Answer
 
 
 def setup_module() -> None:
@@ -14,7 +14,7 @@ def test_check():
         ],
         'trace': -225,
     }
-    task = TaskAnswer(n=1, **answer)
+    task = Answer(n=1, **answer)
     assert task.check()
 
 
@@ -26,5 +26,5 @@ def test_check_fail():
         ],
         'trace': -22599,
     }
-    task = TaskAnswer(n=1, **answer)
+    task = Answer(n=1, **answer)
     assert not task.check()

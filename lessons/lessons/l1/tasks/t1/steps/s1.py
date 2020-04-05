@@ -1,7 +1,7 @@
 from lessons.base import StepBase
-from ..task_answer import TaskAnswer
+from ..answer import Answer
 
 
 class Step(StepBase):
-    def check(self, task_answer: TaskAnswer) -> bool:
-        return task_answer.which_of_products == 'AB'
+    def check(self, answer: Answer) -> bool:
+        return answer.which_of_products == 'AB'

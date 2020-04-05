@@ -2,15 +2,15 @@ from rest_framework.fields import (
     IntegerField,
 )
 
-from lessons.base import TaskAnswerBase, TaskAnswerSerializerBase
+from lessons.base import AnswerBase, AnswerSerializerBase
 from .task import Task
 
 
-class TaskResultSerializer(TaskAnswerSerializerBase):
+class TaskResultSerializer(AnswerSerializerBase):
     determinant = IntegerField()
 
 
-class TaskAnswer(TaskAnswerBase):
+class Answer(AnswerBase):
     serializer = TaskResultSerializer
     task_type = Task
 

@@ -2,11 +2,11 @@ from numpy import allclose
 from numpy.linalg import solve
 
 from lessons.base import StepBase
-from ..task_answer import TaskAnswer
+from ..answer import Answer
 
 
 class Step(StepBase):
-    def check(self, task_answer: TaskAnswer) -> bool:
-        results = solve(task_answer.task.coefficient_matrix,
-                        task_answer.task.constant_terms_vector)
-        return allclose([task_answer.x, task_answer.y, task_answer.z], results)
+    def check(self, answer: Answer) -> bool:
+        results = solve(answer.task.coefficient_matrix,
+                        answer.task.constant_terms_vector)
+        return allclose([answer.x, answer.y, answer.z], results)
