@@ -1,5 +1,5 @@
 from typing import List
-from rest_framework.fields import IntegerField
+from rest_framework.fields import IntegerField, ListField
 
 from lessons.base import TaskBase, TaskSerializerBase
 from lessons.utils.math import MatrixInt
@@ -8,7 +8,7 @@ from lessons.utils.serializer import MatrixField
 
 class TaskSerializer(TaskSerializerBase):
     coefficient_matrix = MatrixField(child=IntegerField())
-    constant_terms_vector = MatrixField(child=IntegerField())
+    constant_terms_vector = ListField(child=IntegerField())
 
 
 class Task(TaskBase):
