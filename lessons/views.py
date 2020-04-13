@@ -44,7 +44,7 @@ def check_task(
     request: Request,
     index: int,
 ) -> bool:
-    serializer = answer_type.serializer(data=request.data[index],
+    serializer = answer_type.serializer(data=request.data['answers'][index],
                                              context={'request': request})
     if not serializer.is_valid():
         return serializer.errors
