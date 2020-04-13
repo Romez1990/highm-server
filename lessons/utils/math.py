@@ -16,10 +16,6 @@ a: Matrix[int] = [
 
 
 def number_to_expression(number: int, first: bool = False) -> str:
-    if first:
-        return str(number)
-
-    if number >= 0:
-        return f'+ {number}'
-    else:
-        return f'- {-number}'
+    if not first and number >= 0:
+        return f'+{number}'
+    return str(number)
