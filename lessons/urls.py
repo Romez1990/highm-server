@@ -1,5 +1,4 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
 from .views import (
     lesson_list,
@@ -9,6 +8,6 @@ from .views import (
 
 urlpatterns = [
     path('lesson/', lesson_list),
-    path('lesson/<int:lesson_pk>/', lesson_retrieve),
-    path('lesson/<int:lesson_pk>/check/', lesson_check),
+    path('lesson/<int:number>/', lesson_retrieve),
+    path('lesson/<int:number>/check/', lesson_check),
 ]

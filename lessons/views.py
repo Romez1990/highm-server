@@ -19,9 +19,9 @@ def lesson_list(request: Request) -> Response:
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
-def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
+def lesson_retrieve(request: Request, number: int) -> Response:
     n = get_n(request)
-    lesson = Lessons.get_lesson(lesson_pk, n)
+    lesson = Lessons.get_lesson(number, n)
     if lesson is None:
         raise Http404()
     serializer = lesson.serializer(lesson)
@@ -30,14 +30,14 @@ def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
 
 @api_view(['POST'])
 @permission_classes([IsStudent])
-def lesson_check(request, lesson_pk: int) -> Response:
-    serializer_class_type = Lessons.get_lesson_results_serializer(lesson_pk)
+def lesson_check(request, number: int) -> Response:
+    serializer_class_type = Lessons.get_lesson_results_serializer(number)
     if serializer_class_type is None:
         raise Http404()
     serializer = serializer_class_type(data=request.data)
     serializer.is_valid(raise_exception=True)
     n = get_n(request)
-    lesson_results = Lessons.get_lesson_results(lesson_pk, n,
+    lesson_results = Lessons.get_lesson_results(number, n,
                                                 serializer.validated_data)
     check_results = lesson_results.check()
     return Response({
