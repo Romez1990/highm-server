@@ -6,14 +6,12 @@ from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task2Serializer(TaskSerializerBase):
     coefficient_matrix = MatrixField(child=IntegerField())
     constant_terms_vector = ListField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task2(TaskBase):
     text = 'Решить (любым методом) систему уравнений, заданную в виде ' \
            '<formula>A * X = B</formula>, где <formula>A</formula> – матрица ' \
            'системы, <formula>B</formula> – столбец свободных элементов:'

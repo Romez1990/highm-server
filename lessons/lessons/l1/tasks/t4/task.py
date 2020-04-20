@@ -5,13 +5,11 @@ from lessons.utils.math import number_to_expression
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task4Serializer(TaskSerializerBase):
     matrix_a = MatrixField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task4(TaskBase):
     def __init__(self, n: int) -> None:
         super().__init__(n)
         self.coefficient_a = n - 8

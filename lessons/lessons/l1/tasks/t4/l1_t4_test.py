@@ -1,30 +1,25 @@
-from lessons.load import load_lessons
-from lessons.lessons.l1.tasks.t4.answer import Answer
-
-
-def setup_module() -> None:
-    load_lessons()
+from lessons.lessons.l1.tasks.t4.answer import Answer4
 
 
 def test_check():
-    answer = {
+    answers = {
         'result': [
             [-147, -68, 137],
             [-41, -65, 48],
             [-96, -82, 45],
         ],
     }
-    task = Answer(n=1, **answer)
-    assert task.check()
+    answer = Answer4(n=1, **answers)
+    assert answer.check()
 
 
 def test_check_fail():
-    answer = {
+    answers = {
         'result': [
             [-147, -68, 137],
             [-41, -65, 48],
             [-96, -82, 4599],
         ],
     }
-    task = Answer(n=1, **answer)
-    assert not task.check()
+    answer = Answer4(n=1, **answers)
+    assert not answer.check()

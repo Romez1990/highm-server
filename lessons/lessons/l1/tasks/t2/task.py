@@ -5,13 +5,11 @@ from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task2Serializer(TaskSerializerBase):
     matrix_a = MatrixField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task2(TaskBase):
     text = 'Найти матрицу <formula>A^3</formula> и её след:'
 
     @property

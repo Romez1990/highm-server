@@ -4,13 +4,11 @@ from lessons.base import TaskBase, TaskSerializerBase
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task5Serializer(TaskSerializerBase):
     equation = MatrixField(child=CharField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task5(TaskBase):
     text = 'Решить уравнение:'
 
     equation = [

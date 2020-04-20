@@ -6,13 +6,11 @@ from lessons.utils.serializer import MatrixField
 from lessons.base import TaskBase
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task6Serializer(TaskSerializerBase):
     matrix_a = MatrixField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task6(TaskBase):
     text = 'Вычислить определитель матрицы четвёртого порядка:'
 
     @property

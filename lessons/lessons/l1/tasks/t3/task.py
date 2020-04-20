@@ -5,13 +5,11 @@ from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task3Serializer(TaskSerializerBase):
     matrix_a = MatrixField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task3(TaskBase):
     text = 'Вычислить определитель матрицы третьего порядка:'
 
     @property

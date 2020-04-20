@@ -3,16 +3,20 @@ from rest_framework.fields import (
 )
 
 from lessons.base import AnswerBase, AnswerSerializerBase
-from .task import Task
+from .task import Task6
+from .steps.s1 import Step1
 
 
-class TaskResultSerializer(AnswerSerializerBase):
+class Answer6Serializer(AnswerSerializerBase):
     determinant = IntegerField()
 
 
-class Answer(AnswerBase):
-    serializer = TaskResultSerializer
-    task_type = Task
+class Answer6(AnswerBase):
+    _task_type = Task6
+    task: Task6
+    _steps = [
+        Step1,
+    ]
 
     def __init__(self, n: int, determinant: int) -> None:
         super().__init__(n)

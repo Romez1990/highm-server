@@ -1,26 +1,21 @@
-from lessons.load import load_lessons
-from lessons.lessons.l2.tasks.t1.answer import Answer
-
-
-def setup_module() -> None:
-    load_lessons()
+from lessons.lessons.l2.tasks.t1.answer import Answer1
 
 
 def test_check():
-    answer = {
+    answers = {
         'x': 0,
         'y': -1,
         'z': 1,
     }
-    task = Answer(n=1, **answer)
-    assert task.check()
+    answer = Answer1(n=1, **answers)
+    assert answer.check()
 
 
 def test_check_fail():
-    answer = {
+    answers = {
         'x': 0,
         'y': -1,
         'z': 199,
     }
-    task = Answer(n=1, **answer)
-    assert not task.check()
+    answer = Answer1(n=1, **answers)
+    assert not answer.check()

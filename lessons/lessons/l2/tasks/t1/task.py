@@ -6,14 +6,12 @@ from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task1Serializer(TaskSerializerBase):
     coefficient_matrix = MatrixField(child=IntegerField())
     constant_terms_vector = ListField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task1(TaskBase):
     text = 'Методом обратной матрицы, по формулам Крамера и методом Гаусса ' \
            'решить систему уравнений:'
 

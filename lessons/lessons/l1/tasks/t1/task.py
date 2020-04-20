@@ -5,14 +5,12 @@ from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
 
 
-class TaskSerializer(TaskSerializerBase):
+class Task1Serializer(TaskSerializerBase):
     matrix_a = MatrixField(child=IntegerField())
     matrix_b = MatrixField(child=IntegerField())
 
 
-class Task(TaskBase):
-    serializer = TaskSerializer
-
+class Task1(TaskBase):
     text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
            '<formula>BA</formula>, которое существует: '
 

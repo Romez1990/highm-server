@@ -1,52 +1,45 @@
-from typing import Type
 from django.http import Http404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from users.permissions import IsStudent
-from .base import AnswerBase
-from .serializers import LessonSerializer, LessonDetailsSerializer
-from .load import get_lessons, get_lesson
+from users.utils import get_n
+from .base import LessonTitleSerializer
+from .lessons import Lessons
 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
 def lesson_list(request: Request) -> Response:
-    serializer = LessonSerializer(get_lessons(), many=True)
+    lessons = Lessons.get_lesson_list()
+    serializer = LessonTitleSerializer(lessons, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
 def lesson_retrieve(request: Request, lesson_pk: int) -> Response:
-    lesson = get_lesson(lesson_pk)
+    n = get_n(request)
+    lesson = Lessons.get_lesson(lesson_pk, n)
     if lesson is None:
         raise Http404()
-    serializer = LessonDetailsSerializer(lesson, context={'request': request})
+    serializer = lesson.serializer(lesson)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([IsStudent])
 def lesson_check(request, lesson_pk: int) -> Response:
-    lesson = get_lesson(lesson_pk)
-    if lesson is None:
+    serializer_class_type = Lessons.get_lesson_results_serializer(lesson_pk)
+    if serializer_class_type is None:
         raise Http404()
-    return Response(
-        [check_task(Answer, request, index)
-         for index, Answer in enumerate(lesson.answers)]
-    )
-
-
-def check_task(
-    answer_type: Type[AnswerBase],
-    request: Request,
-    index: int,
-) -> bool:
-    serializer = answer_type.serializer(data=request.data['answers'][index],
-                                             context={'request': request})
-    if not serializer.is_valid():
-        return serializer.errors
-    answer = answer_type(**serializer.data)
-    return answer.check()
+    serializer = serializer_class_type(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    n = get_n(request)
+    lesson_results = Lessons.get_lesson_results(lesson_pk, n,
+                                                serializer.validated_data)
+    check_results = lesson_results.check()
+    return Response({
+        'results': check_results
+    })

@@ -1,22 +1,24 @@
-from typing import List
 from rest_framework.fields import (
     IntegerField,
 )
 
 from lessons.base import AnswerBase, AnswerSerializerBase
-from .task import Task
+from .task import Task2
+from .steps.s1 import Step1
 
 
-class TaskResultSerializer(AnswerSerializerBase):
+class Answer2Serializer(AnswerSerializerBase):
     x = IntegerField()
     y = IntegerField()
     z = IntegerField()
 
 
-class Answer(AnswerBase):
-    serializer = TaskResultSerializer
-    task_type = Task
-    task: Task
+class Answer2(AnswerBase):
+    _task_type = Task2
+    task: Task2
+    _steps = [
+        Step1,
+    ]
 
     def __init__(
         self,
