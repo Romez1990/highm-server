@@ -37,8 +37,8 @@ def lesson_check(request, number: int) -> Response:
     serializer = serializer_class_type(data=request.data)
     serializer.is_valid(raise_exception=True)
     n = get_n(request)
-    lesson_results = Lessons.get_lesson_results(number, n,
-                                                serializer.validated_data)
+    results = serializer.validated_data
+    lesson_results = Lessons.get_lesson_results(number, n, results)
     check_results = lesson_results.check()
     return Response({
         'results': check_results
