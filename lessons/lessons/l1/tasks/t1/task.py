@@ -11,8 +11,8 @@ class Task1Serializer(TaskSerializerBase):
 
 
 class Task1(TaskBase):
-    text = 'Найти то из произведений матриц <formula>AB</formula> и ' \
-           '<formula>BA</formula>, которое существует: '
+    text = 'Найти то из произведений матриц <formula>AB</formula> или ' \
+           '<formula>BA</formula>, которое существует:'
 
     @property
     def matrix_a(self) -> MatrixInt:
