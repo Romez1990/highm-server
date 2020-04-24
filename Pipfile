@@ -6,6 +6,9 @@ verify_ssl = true
 [requires]
 python_version = "3.8"
 
+[scripts]
+dev = "python manage.py runserver"
+
 [packages]
 django = "*"
 
