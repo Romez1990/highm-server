@@ -5,6 +5,7 @@ from rest_framework.serializers import (
     CharField,
     EmailField,
     DateTimeField,
+    ListField,
     SerializerMethodField,
 )
 from rest_framework.exceptions import ValidationError
@@ -196,6 +197,32 @@ class GroupBasicSerializer(ModelSerializer):
 
     def get_number_of_students(self, group):
         return group.students.count() + group.unregistered_students.count()
+
+
+class GroupCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['name', 'students']
+
+    students = ListField(
+        child=UnregisteredUserBasicSerializer(), max_length=50,
+        required=False)
+
+    def create(self, validated_data):
+        group = super().create({
+            'name': validated_data['name'],
+        })
+        if 'students' in validated_data:
+            def create_registration_code(registration_code):
+                registration_code = UnregisteredUser(**registration_code,
+                                                     group=group,
+                                                     is_staff=False)
+                return registration_code
+
+            registration_codes = map(create_registration_code,
+                                     validated_data['students'])
+            UnregisteredUser.objects.bulk_create(registration_codes)
+        return validated_data
 
 
 class GroupSerializer(ModelSerializer):
