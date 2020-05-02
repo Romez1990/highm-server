@@ -9,17 +9,20 @@ from rest_framework.response import Response
 from .models import (
     Profile,
     Student,
+    Teacher,
     Group,
 )
 from .serializers import (
     ProfileSerializer,
     StudentSerializer,
+    TeacherSerializer,
     GroupBasicSerializer,
     GroupSerializer,
 )
 from .permissions import (
     IsAuthenticated,
     IsTeacher,
+    IsAdmin,
 )
 
 
@@ -47,6 +50,12 @@ class StudentViewSet(RegistrableModelViewSet):
     permission_classes = [IsTeacher]
     serializer_class = StudentSerializer
     queryset = Student.objects.filter(user__is_superuser=False)
+
+
+class TeacherViewSet(RegistrableModelViewSet):
+    permission_classes = [IsAdmin]
+    serializer_class = TeacherSerializer
+    queryset = Teacher.objects.all()
 
 
 class GroupViewSet(ModelViewSet):

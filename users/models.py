@@ -49,3 +49,10 @@ class Student(Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+
+
+class Teacher(Model):
+    user = OneToOneField(User, on_delete=CASCADE, primary_key=True)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'

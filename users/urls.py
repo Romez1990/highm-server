@@ -5,6 +5,7 @@ from highm_server.settings import DEBUG
 from .views import (
     ProfileView,
     StudentViewSet,
+    TeacherViewSet,
     GroupViewSet,
 )
 
@@ -15,6 +16,7 @@ urlpatterns = [
 
 router = SimpleRouter()
 router.register('student', StudentViewSet, basename='student')
+router.register('teacher', TeacherViewSet, basename='teacher')
 router.register('group', GroupViewSet, basename='group')
 urlpatterns += router.urls
 
