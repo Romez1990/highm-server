@@ -7,18 +7,21 @@ from rest_framework.response import Response
 
 from .models import (
     Student,
+    Teacher,
     Group,
     GROUP_ADMINS,
 )
 from .serializers import (
     ProfileSerializer,
     StudentSerializer,
+    TeacherSerializer,
     GroupBasicSerializer,
     GroupSerializer,
 )
 from .permissions import (
     IsAuthenticated,
     IsTeacher,
+    IsAdmin,
 )
 
 
@@ -49,6 +52,12 @@ class StudentViewSet(RegistrableModelViewSet):
         if user.is_superuser:
             return queryset
         return queryset.exclude(group__name=GROUP_ADMINS)
+
+
+class TeacherViewSet(RegistrableModelViewSet):
+    permission_classes = [IsAdmin]
+    serializer_class = TeacherSerializer
+    queryset = Teacher.objects
 
 
 class GroupViewSet(ModelViewSet):

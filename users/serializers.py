@@ -14,6 +14,7 @@ from .models import (
     Profile,
     Group,
     Student,
+    Teacher,
 )
 
 
@@ -89,6 +90,17 @@ class StudentSerializer(ModelSerializer, UserSerializerMixin):
                 'group_name': ['Group not found.']
             })
         instance.group = group
+
+
+class TeacherSerializer(ModelSerializer, UserSerializerMixin):
+    class Meta:
+        model = Teacher
+        fields = UserSerializerMixin.Meta.fields + []
+
+    def update(self, instance, validated_data):
+        UserSerializerMixin.update(self, instance.user,
+                                   validated_data.pop('user', {}))
+        return instance
 
 
 class GroupBasicSerializer(ModelSerializer):
