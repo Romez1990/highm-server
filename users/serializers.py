@@ -17,6 +17,7 @@ from allauth.account import app_settings as allauth_settings
 from .models import (
     Profile,
     Group,
+    GROUP_ADMINS,
     Student,
     Teacher,
     UnregisteredUser,
@@ -97,6 +98,11 @@ class StudentSerializer(ModelSerializer, UserSerializerMixin):
             })
         instance.group = group
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['registered'] = True
+        return ret
+
 
 class TeacherSerializer(ModelSerializer, UserSerializerMixin):
     class Meta:
@@ -108,6 +114,78 @@ class TeacherSerializer(ModelSerializer, UserSerializerMixin):
                                    validated_data.pop('user', {}))
         return instance
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['registered'] = True
+        return ret
+
+
+class UnregisteredUserBasicSerializer(ModelSerializer):
+    class Meta:
+        model = UnregisteredUser
+        fields = ['code', 'first_name', 'last_name']
+        read_only_fields = ['code']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['registered'] = False
+        return ret
+
+
+class UnregisteredStudentSerializer(ModelSerializer):
+    class Meta:
+        model = UnregisteredUser
+        fields = ['code', 'first_name', 'last_name', 'group_name']
+        read_only_fields = ['code']
+
+    group_name = CharField(source='group.name')
+
+    def create(self, validated_data):
+        validated_data['is_staff'] = False
+        group_name = validated_data.pop('group', {}).pop('name', None)
+        validated_data['group'] = self.get_group(group_name)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        group_name = validated_data.pop('group', {}).pop('name', None)
+        instance.group = self.get_group(group_name)
+        return super().update(instance, validated_data)
+
+    def get_group(self, group_name):
+        if group_name is None:
+            return None
+        user = self.context['request'].user
+        try:
+            queryset = Group.objects
+            if user.is_superuser:
+                return queryset.get(name=group_name)
+            return queryset.exclude(name=GROUP_ADMINS).get(name=group_name)
+        except Group.DoesNotExist:
+            raise ValidationError({
+                'group_name': ['Group not found.']
+            })
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['registered'] = False
+        return ret
+
+
+class UnregisteredTeacherCreateSerializer(ModelSerializer):
+    class Meta:
+        model = UnregisteredUser
+        fields = ['code', 'first_name', 'last_name']
+        read_only_fields = ['code']
+
+    def create(self, validated_data):
+        validated_data['is_staff'] = True
+        return super().create(validated_data)
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['registered'] = False
+        return ret
+
 
 class GroupBasicSerializer(ModelSerializer):
     class Meta:
@@ -117,7 +195,7 @@ class GroupBasicSerializer(ModelSerializer):
     number_of_students = SerializerMethodField(read_only=True)
 
     def get_number_of_students(self, group):
-        return group.students.count()
+        return group.students.count() + group.unregistered_students.count()
 
 
 class GroupSerializer(ModelSerializer):
@@ -125,7 +203,13 @@ class GroupSerializer(ModelSerializer):
         model = Group
         fields = ['name', 'students']
 
-    students = StudentSerializer(many=True)
+    students = SerializerMethodField()
+
+    def get_students(self, group):
+        registered = StudentSerializer(group.students, many=True).data
+        unregistered = UnregisteredUserBasicSerializer(
+            group.unregistered_students, many=True).data
+        return registered + unregistered
 
 
 class RegistrationCodeCheckSerializer(Serializer):
