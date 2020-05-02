@@ -25,6 +25,7 @@ from .serializers import (
     StudentSerializer,
     TeacherSerializer,
     GroupBasicSerializer,
+    GroupCreateSerializer,
     GroupSerializer,
     UnregisteredStudentSerializer,
     UnregisteredTeacherCreateSerializer,
@@ -131,7 +132,7 @@ class GroupViewSet(ModelViewSet):
     lookup_value_regex = '.+'
     serializer_classes = {
         'list': GroupBasicSerializer,
-        'create': GroupBasicSerializer,
+        'create': GroupCreateSerializer,
         'retrieve': GroupSerializer,
         'update': GroupBasicSerializer,
         'partial_update': GroupBasicSerializer,
