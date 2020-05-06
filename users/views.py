@@ -149,7 +149,7 @@ class GroupViewSet(ModelViewSet):
 
     def destroy(self, *args, **kwargs) -> Response:
         group = self.get_object()
-        if group.students.count() + group.unregistered_students.count() > 0:
+        if group.students.exists() or group.unregistered_students.exists():
             raise ValidationError({
                 'number_of_students': [
                     'Cannot delete non-empty group.',

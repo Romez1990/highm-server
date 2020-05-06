@@ -278,25 +278,14 @@ class RegisterSerializer(Serializer):
 
     def get_cleaned_data(self):
         return {
-            'username': self.validated_data['email'],
             'email': self.validated_data['email'],
             'password': self.validated_data['password'],
         }
-
-    def custom_signup(self, request, user):
-        registration_code = self.validated_data['registration_code']
-        user.first_name = registration_code.first_name
-        user.last_name = registration_code.last_name
-        user.save()
-        Profile.objects.create(user=user)
-        Student.objects.create(user=user, group=registration_code.group)
-        registration_code.delete()
 
     def save(self, request):
         adapter = get_adapter()
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
         adapter.save_user(request, user, self)
-        self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
