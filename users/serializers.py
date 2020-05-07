@@ -157,7 +157,7 @@ class UnregisteredStudentSerializer(ModelSerializer):
             return None
         user = self.context['request'].user
         try:
-            queryset = Group.objects.all()
+            queryset = Group.objects
             if user.is_superuser:
                 return queryset.get(name=group_name)
             return queryset.exclude(name=GROUP_ADMINS).get(name=group_name)

@@ -115,7 +115,7 @@ class StudentViewSet(RegistrableModelViewSet):
 
     def get_queryset_registered(self):
         user = self.request.user
-        queryset = Student.objects.all()
+        queryset = Student.objects
         if user.is_superuser:
             return queryset
         return queryset.exclude(group__name=GROUP_ADMINS)
@@ -134,7 +134,7 @@ class TeacherViewSet(RegistrableModelViewSet):
     serializer_class_unregistered = UnregisteredTeacherCreateSerializer
 
     def get_queryset_registered(self):
-        return Teacher.objects.all()
+        return Teacher.objects
 
     def get_queryset_unregistered(self):
         return UnregisteredUser.objects.filter(is_staff=True)
