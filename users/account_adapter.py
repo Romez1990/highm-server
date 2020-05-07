@@ -15,9 +15,9 @@ class AccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
         data = form.cleaned_data
         unregistered_user = data.get('unregistered_user')
-        first_name = unregistered_user.first_name
-        last_name = unregistered_user.last_name
         is_staff = unregistered_user.is_staff
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
         email = data.get('email')
         username = email
         user_email(user, email)

@@ -278,6 +278,9 @@ class RegisterSerializer(Serializer):
 
     def get_cleaned_data(self):
         return {
+            'unregistered_user': self.validated_data['registration_code'],
+            'first_name': self.validated_data['first_name'],
+            'last_name': self.validated_data['last_name'],
             'email': self.validated_data['email'],
             'password': self.validated_data['password'],
         }
