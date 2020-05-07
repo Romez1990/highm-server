@@ -18,6 +18,7 @@ from allauth.account import app_settings as allauth_settings
 from .models import (
     Profile,
     Group,
+    GROUP_ADMINS,
     Student,
     Teacher,
     UnregisteredUser,
@@ -154,8 +155,12 @@ class UnregisteredStudentSerializer(ModelSerializer):
     def get_group(self, group_name):
         if group_name is None:
             return None
+        user = self.context['request'].user
         try:
-            return Group.objects.get(name=group_name)
+            queryset = Group.objects.all()
+            if user.is_superuser:
+                return queryset.get(name=group_name)
+            return queryset.exclude(name=GROUP_ADMINS).get(name=group_name)
         except Group.DoesNotExist:
             raise ValidationError({
                 'group_name': ['Group not found.']

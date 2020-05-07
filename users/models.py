@@ -29,6 +29,9 @@ class Profile(Model):
                f'{self.user.last_name}'
 
 
+GROUP_ADMINS = 'admins'
+
+
 class Group(Model):
     name = CharField(verbose_name='Name', max_length=30, unique=True,
                      validators=[group_name_validator])

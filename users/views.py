@@ -18,6 +18,7 @@ from .models import (
     Student,
     Teacher,
     Group,
+    GROUP_ADMINS,
     UnregisteredUser,
 )
 from .serializers import (
@@ -71,20 +72,28 @@ class RegistrableModelViewSet(ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         # django rest framework call this with rendering list without pk
         if 'pk' in self.kwargs and not self.is_registered():
-            return self.serializer_class_unregistered(*args, **kwargs)
+            return self.get_serializer_unregistered(*args, **kwargs)
+        return self.get_serializer_registered(*args, **kwargs)
+
+    def get_serializer_registered(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
         return self.serializer_class_registered(*args, **kwargs)
+
+    def get_serializer_unregistered(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        return self.serializer_class_unregistered(*args, **kwargs)
 
     def list(self, request: Request, **kwargs) -> Response:
         registered_queryset = self.get_queryset_registered()
-        registered = self.serializer_class_registered(registered_queryset,
-                                                      many=True).data
+        registered = self.get_serializer_registered(registered_queryset,
+                                                    many=True).data
         unregistered_queryset = self.get_queryset_unregistered()
-        unregistered = self.serializer_class_unregistered(unregistered_queryset,
-                                                          many=True).data
+        unregistered = self.get_serializer_unregistered(unregistered_queryset,
+                                                        many=True).data
         return Response(registered + unregistered)
 
     def create(self, request: Request, **kwargs) -> Response:
-        serializer = self.serializer_class_unregistered(data=request.data)
+        serializer = self.get_serializer_unregistered(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=HTTP_201_CREATED)
@@ -106,12 +115,17 @@ class StudentViewSet(RegistrableModelViewSet):
 
     def get_queryset_registered(self):
         user = self.request.user
+        queryset = Student.objects.all()
         if user.is_superuser:
-            return Student.objects.all()
-        return Student.objects.filter(user__is_superuser=False)
+            return queryset
+        return queryset.exclude(group__name=GROUP_ADMINS)
 
     def get_queryset_unregistered(self):
-        return UnregisteredUser.objects.filter(is_staff=False)
+        user = self.request.user
+        queryset = UnregisteredUser.objects.filter(is_staff=False)
+        if user.is_superuser:
+            return queryset
+        return queryset.exclude(group__name=GROUP_ADMINS)
 
 
 class TeacherViewSet(RegistrableModelViewSet):
@@ -145,7 +159,7 @@ class GroupViewSet(ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Group.objects.all()
-        return Group.objects.all().exclude(name='admins')
+        return Group.objects.exclude(name=GROUP_ADMINS)
 
     def destroy(self, *args, **kwargs) -> Response:
         group = self.get_object()
