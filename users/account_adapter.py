@@ -35,7 +35,7 @@ class AccountAdapter(DefaultAccountAdapter):
 
         Profile.objects.create(user=user)
 
-        if not is_staff:
+        if is_staff:
             Teacher.objects.create(user=user)
         else:
             Student.objects.create(user=user, group=unregistered_user.group)
@@ -46,23 +46,19 @@ class AccountAdapter(DefaultAccountAdapter):
 
     def send_confirmation_mail(self, request, emailconfirmation, signup):
         current_site = get_current_site(request)
-        activate_url = f'{CLIENT_URL}/confirm-email/{emailconfirmation.key}'
-        activate_url_old = self.get_email_confirmation_url(
-            request,
-            emailconfirmation)
+        key = emailconfirmation.key
+        activate_url = f'{CLIENT_URL}/confirm-email/{key}'
         ctx = {
             'user': emailconfirmation.email_address.user,
             'activate_url': activate_url,
-            'activate_url_old': activate_url_old,
             'current_site': current_site,
-            'key': emailconfirmation.key,
+            'key': key,
         }
         if signup:
             email_template = 'account/email/email_confirmation_signup'
         else:
             email_template = 'account/email/email_confirmation'
-        self.send_mail(email_template,
-                       emailconfirmation.email_address.email,
+        self.send_mail(email_template, emailconfirmation.email_address.email,
                        ctx)
 
     def render_mail(self, template_prefix, email, context):
@@ -80,5 +76,5 @@ class AccountAdapter(DefaultAccountAdapter):
         msg.content_subtype = 'html'
         return msg
 
-    def get_from_email(self):
-        return 'HighM МИФИ'
+    # def get_from_email(self):
+    #     return 'HighM МИФИ'

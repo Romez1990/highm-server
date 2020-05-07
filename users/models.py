@@ -16,6 +16,10 @@ from users.validators import group_name_validator
 User = get_user_model()
 
 
+def user_display(user) -> str:
+    return f'{user.first_name} {user.last_name}'
+
+
 class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE, primary_key=True)
     dark_mode = BooleanField(verbose_name='Dark mode', default=False)

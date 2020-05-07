@@ -1,4 +1,5 @@
 from typing import Type
+from django.http import Http404
 from rest_framework.generics import (
     RetrieveUpdateAPIView,
 )
@@ -8,9 +9,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
-from rest_framework.authentication import TokenAuthentication
 from rest_auth.registration.views import (
-    RegisterView as BaseRegisterView,
     VerifyEmailView as BaseVerifyEmailView,
 )
 
@@ -159,11 +158,15 @@ class GroupViewSet(ModelViewSet):
         return super().destroy(*args, **kwargs)
 
 
-class RegisterView(BaseRegisterView):
-    # to avoid csrf failing error
-    authentication_classes = [TokenAuthentication]
-
-
 class VerifyEmailView(BaseVerifyEmailView):
-    # to avoid csrf failing error
-    authentication_classes = [TokenAuthentication]
+    def get(self, request: Request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = serializer.validated_data['key']
+        try:
+            self.get_object()
+        except Http404:
+            raise Http404()
+        return Response({
+            'valid': True,
+        })

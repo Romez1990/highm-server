@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
+from rest_auth.registration.views import RegisterView
 
 from highm_server.settings import DEBUG
 from .views import (
@@ -7,7 +8,6 @@ from .views import (
     StudentViewSet,
     TeacherViewSet,
     GroupViewSet,
-    RegisterView,
     VerifyEmailView,
 )
 
