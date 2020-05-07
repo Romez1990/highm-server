@@ -45,9 +45,6 @@ class ProfileView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user.profile
 
-    def get_queryset(self):
-        return Profile.objects.none()
-
 
 class RegistrableModelViewSet(ModelViewSet):
     serializer_class_registered: Type[Serializer]
