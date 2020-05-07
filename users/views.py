@@ -155,7 +155,7 @@ class GroupViewSet(ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return Group.objects.all()
+            return Group.objects
         return Group.objects.exclude(name=GROUP_ADMINS)
 
     def destroy(self, *args, **kwargs) -> Response:
