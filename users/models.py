@@ -85,7 +85,7 @@ class UnregisteredUser(Model):
     def generate_code(self):
         while True:
             code = f'c{str(randint(0, 999_999)).zfill(6)}'
-            if UnregisteredUser.objects.filter(code=code).count() == 0:
+            if not UnregisteredUser.objects.filter(code=code).exists():
                 break
         self.code = code
 
