@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import (
     TYPE_CHECKING,
 )
@@ -14,8 +13,8 @@ if TYPE_CHECKING:
 class Step2(StepBase):
     max_points = 1
 
-    _task: Task2
-    _answer: Answer2
+    _task: 'Task2'
+    _answer: 'Answer2'
 
     def _check(self) -> bool:
         answered_trace = self._answer.trace

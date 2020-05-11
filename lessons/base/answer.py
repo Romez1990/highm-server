@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import (
     TYPE_CHECKING,
     Type,
@@ -13,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class AnswerBase:
-    _step_classes: List[Type[StepBase]]
-    _task_class: Type[TaskBase]
+    _step_classes: List[Type['StepBase']]
+    _task_class: Type['TaskBase']
 
     def __init__(self, n: int) -> None:
         self._n = n

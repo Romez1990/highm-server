@@ -1,4 +1,3 @@
-from __future__ import annotations
 from random import randint
 from django.db.models import (
     Model,
@@ -94,7 +93,7 @@ class UnregisteredUser(Model):
             self.generate_code()
         super().save(*args, **kwargs)
 
-    def generate_code(self) -> UnregisteredUser:
+    def generate_code(self) -> 'UnregisteredUser':
         while True:
             registration_code = f'c{str(randint(0, 999_999)).zfill(6)}'
             queryset = UnregisteredUser.objects.filter(

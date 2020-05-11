@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import (
     TYPE_CHECKING,
     Union,
@@ -11,7 +10,7 @@ if TYPE_CHECKING:
 class StepBase:
     max_points: int
 
-    def __init__(self, task: TaskBase, answer: AnswerBase) -> None:
+    def __init__(self, task: 'TaskBase', answer: 'AnswerBase') -> None:
         self._task = task
         self._answer = answer
         result = self._check()
