@@ -5,21 +5,31 @@
 
 {% autoescape off %}
   {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
-    {{ site_name }}
-    <br>
-    <br>
-    Здравствуйте, вы получаете это письмо потому, что пользователь
-    {{ user_display }} дал вашу почту, чтобы зарегистрировать его аккаунт.
-    <br>
-    <br>
-    Чтобы подтвердить данну электронную почту, перейдите по ссылке
-    <a href="{{ activate_url }}">{{ activate_url }}</a>
-  {% endblocktrans %}
-  <br>
-  <br>
-  {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
-    Спасибо!
-    <br>
-    {{ site_domain }}
+    <div style="font-size: 18px">
+      <p>Добро пожаловать на {{ site_name }}!</p>
+      <p>
+        {{ user_display }}, спасибо, что зарегистрировались в нашей системе.
+      </p>
+      <p>Чтобы активировать Ваш аккаунт, нажмите на кнопку внизу.</p>
+      <div>
+        <a
+          href="{{ activate_url }}"
+          style="
+            position: relative;
+            display: inline-block;
+            margin: 0 0.3em 0.3em 0;
+            padding: 0.7em 1.4em;
+            border-radius: 0.15em;
+            box-sizing: border-box;
+            background: #1976d2;
+            box-shadow: inset 0 -0.6em 0 -0.35em rgba(0, 0, 0, 0.17);
+            color: #FFFFFF;
+            font: 400 18px 'Roboto', sans-serif;
+            text-transform: uppercase;
+            text-decoration: none;
+          "
+        >Активировать аккаунт</a>
+      </div>
+    </div>
   {% endblocktrans %}
 {% endautoescape %}
