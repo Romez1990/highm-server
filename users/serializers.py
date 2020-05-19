@@ -124,8 +124,8 @@ class TeacherSerializer(ModelSerializer, UserSerializerMixin):
 class UnregisteredUserBasicSerializer(ModelSerializer):
     class Meta:
         model = UnregisteredUser
-        fields = ['code', 'first_name', 'last_name']
-        read_only_fields = ['code']
+        fields = ['registration_code', 'first_name', 'last_name']
+        read_only_fields = ['registration_code']
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -136,8 +136,8 @@ class UnregisteredUserBasicSerializer(ModelSerializer):
 class UnregisteredStudentSerializer(ModelSerializer):
     class Meta:
         model = UnregisteredUser
-        fields = ['code', 'first_name', 'last_name', 'group_name']
-        read_only_fields = ['code']
+        fields = ['registration_code', 'first_name', 'last_name', 'group_name']
+        read_only_fields = ['registration_code']
 
     group_name = CharField(source='group.name')
 
@@ -175,8 +175,8 @@ class UnregisteredStudentSerializer(ModelSerializer):
 class UnregisteredTeacherCreateSerializer(ModelSerializer):
     class Meta:
         model = UnregisteredUser
-        fields = ['code', 'first_name', 'last_name']
-        read_only_fields = ['code']
+        fields = ['registration_code', 'first_name', 'last_name']
+        read_only_fields = ['registration_code']
 
     def create(self, validated_data):
         validated_data['is_staff'] = True

@@ -67,8 +67,8 @@ class Teacher(Model):
 
 
 class UnregisteredUser(Model):
-    code = CharField(verbose_name='Code', max_length=7, primary_key=True,
-                     unique=True)
+    registration_code = CharField(verbose_name='Code', max_length=7,
+                                  primary_key=True, unique=True)
     first_name = CharField(verbose_name='First name', max_length=50)
     last_name = CharField(verbose_name='Last name', max_length=50)
     group = ForeignKey(Group, verbose_name='Group',
@@ -78,16 +78,18 @@ class UnregisteredUser(Model):
     created_at = DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if not self.code:
+        if not self.registration_code:
             self.generate_code()
         super().save(*args, **kwargs)
 
     def generate_code(self):
         while True:
-            code = f'c{str(randint(0, 999_999)).zfill(6)}'
-            if not UnregisteredUser.objects.filter(code=code).exists():
+            registration_code = f'c{str(randint(0, 999_999)).zfill(6)}'
+            queryset = UnregisteredUser.objects.filter(
+                registration_code=registration_code)
+            if not queryset.exists():
                 break
-        self.code = code
+        self.registration_code = registration_code
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.code}'
+        return f'{self.first_name} {self.last_name} {self.registration_code}'
