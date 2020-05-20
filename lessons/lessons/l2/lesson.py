@@ -28,10 +28,7 @@ class Lesson2(LessonBase):
         'закрепить теоретические и практические знания и навыки по данной теме',
     ]
 
-    def __init__(
-        self,
-        n: int,
-    ) -> None:
+    def __init__(self, n: int) -> None:
         super().__init__(n)
         self.tasks = {
             'task1': Task1(n),
