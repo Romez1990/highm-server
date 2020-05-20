@@ -20,7 +20,8 @@ class LessonViewSet(ViewSet):
     lookup_value_regex = r'\d+'
 
     def list(self, request: Request) -> Response:
-        lessons = Lessons.get_lesson_list()
+        student = request.user.student
+        lessons = Lessons.get_lesson_list(student)
         serializer = LessonBasicSerializer(lessons, many=True)
         return Response(serializer.data)
 

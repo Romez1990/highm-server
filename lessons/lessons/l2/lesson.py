@@ -3,6 +3,8 @@ from rest_framework.serializers import Serializer
 from lessons.base import (
     LessonBaseSerializer,
     LessonBase,
+    LessonBasicBase,
+    LessonBasicBaseBase,
 )
 from .tasks.t1.task import Task1, Task1Serializer
 from .tasks.t2.task import Task2, Task2Serializer
@@ -19,10 +21,17 @@ class Lesson2Serializer(LessonBaseSerializer):
     tasks = Lesson2TasksSerializer()
 
 
-class Lesson2(LessonBase):
-    serializer = Lesson2Serializer
+class Lesson2BasicBase(LessonBasicBaseBase):
     title = 'Решение систем линейных уравнений методом Крамера, матричным ' \
             'способом, методом Гаусса.'
+
+
+class Lesson2Basic(Lesson2BasicBase, LessonBasicBase):
+    number = 2
+
+
+class Lesson2(Lesson2Basic, LessonBase):
+    serializer = Lesson2Serializer
     goals = [
         'получить навыки решения систем n линейных уравнений с n переменными',
         'закрепить теоретические и практические знания и навыки по данной теме',

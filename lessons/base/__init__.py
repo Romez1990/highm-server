@@ -1,5 +1,7 @@
 from .lesson import (
     LessonBase,
+    LessonBasicBase,
+    LessonBasicBaseBase,
     LessonBasicSerializer,
     LessonBaseSerializer,
 )

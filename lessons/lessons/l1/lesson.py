@@ -3,6 +3,8 @@ from rest_framework.serializers import Serializer
 from lessons.base import (
     LessonBaseSerializer,
     LessonBase,
+    LessonBasicBase,
+    LessonBasicBaseBase,
 )
 from .tasks.t1.task import Task1, Task1Serializer
 from .tasks.t2.task import Task2, Task2Serializer
@@ -25,9 +27,16 @@ class Lesson1Serializer(LessonBaseSerializer):
     tasks = Lesson1TasksSerializer()
 
 
-class Lesson1(LessonBase):
-    serializer = Lesson1Serializer
+class Lesson1BasicBase(LessonBasicBaseBase):
     title = 'Выполнение действий с матрицами. Вычисление определителя матрицы.'
+
+
+class Lesson1Basic(Lesson1BasicBase, LessonBasicBase):
+    number = 1
+
+
+class Lesson1(Lesson1BasicBase, LessonBase):
+    serializer = Lesson1Serializer
     goals = [
         'получить навыки выполнения операций над матрицами и вычисления '
         'определителей квадратных матриц различных порядков',

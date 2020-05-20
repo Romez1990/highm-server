@@ -1,33 +1,36 @@
 from typing import List, Tuple, Type, Optional, Dict, Mapping, Any
 from django.http import Http404
 
+from users.models import Student
 from lessons.base import (
     LessonBase,
+    LessonBasicBase,
     LessonResultsBase,
     LessonResultsBaseSerializer,
 )
-from .l1.lesson import Lesson1
+from .l1.lesson import Lesson1, Lesson1Basic
 from .l1.lesson_results import Lesson1Results
-from .l2.lesson import Lesson2
+from .l2.lesson import Lesson2, Lesson2Basic
 from .l2.lesson_results import Lesson2Results
 
 
 class Lessons:
-    lessons: List[Tuple[Type[LessonBase], Type[LessonResultsBase]]] = [
-        (Lesson1, Lesson1Results),
-        (Lesson2, Lesson2Results),
+    lessons: List[Tuple[
+        Type[LessonBasicBase], Type[LessonBase], Type[LessonResultsBase]]] = [
+        (Lesson1Basic, Lesson1, Lesson1Results),
+        (Lesson2Basic, Lesson2, Lesson2Results),
     ]
 
     @staticmethod
-    def get_lesson_list() -> List[Type[LessonBase]]:
-        return [lesson for lesson, _ in Lessons.lessons]
+    def get_lesson_list(student: Student) -> List[LessonBasicBase]:
+        return [lesson_basic(student) for lesson_basic, _, _ in Lessons.lessons]
 
     @staticmethod
     def get_lesson(number: int, n: int) -> Optional[LessonBase]:
         index = number - 1
         if index >= len(Lessons.lessons):
             return None
-        lesson, _ = Lessons.lessons[index]
+        _, lesson, _ = Lessons.lessons[index]
         return lesson(n)
 
     @staticmethod
@@ -46,7 +49,7 @@ class Lessons:
         index = number - 1
         if index >= len(Lessons.lessons):
             return None
-        _, lesson_results = Lessons.lessons[index]
+        _, _, lesson_results = Lessons.lessons[index]
         serializer_class = lesson_results.serializer
         return serializer_class(*args, **kwargs)
 
@@ -71,7 +74,7 @@ class Lessons:
         index = number - 1
         if index >= len(Lessons.lessons):
             return None
-        _, lesson_results = Lessons.lessons[index]
+        _, _, lesson_results = Lessons.lessons[index]
         return lesson_results(n, **results['answers'])
 
     @staticmethod
