@@ -12,7 +12,7 @@ class LessonResultsBase:
     serializer: Type[LessonResultsBaseSerializer]
     answers: Dict[str, AnswerBase]
 
-    def __init__(self, n: int) -> None:
+    def __init__(self, n: int, **kwargs: Dict[str, Mapping[str, Any]]) -> None:
         self.n = n
 
     def check(self) -> Dict[str, bool]:
