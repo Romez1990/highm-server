@@ -13,6 +13,7 @@ from .models import (
     LessonResult,
     TaskResult,
 )
+from .serializers import LessonResultSerializer
 
 
 class LessonViewSet(ViewSet):
@@ -67,11 +68,28 @@ class LessonViewSet(ViewSet):
             'results': check_results
         })
 
+    @action(detail=True, methods=['get'])
+    def results(self, request: Request, number: str) -> Response:
+        self.check_lesson_passed()
+        student = request.user.student
+        number_int = int(number)
+        results = LessonResult.objects.get(student=student,
+                                           lesson_number=number_int)
+        serializer = LessonResultSerializer(results)
+        return Response(serializer.data)
+
     def check_lesson_not_passed(self) -> None:
         queryset = self.get_queryset()
         if queryset.exists():
             raise ValidationError({
                 'detail': 'This lesson has been passed.'
+            })
+
+    def check_lesson_passed(self) -> None:
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            raise ValidationError({
+                'detail': 'No results for this lesson.'
             })
 
     def get_queryset(self) -> QuerySet:
