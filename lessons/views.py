@@ -40,22 +40,22 @@ class LessonViewSet(ViewSet):
         self.check_lesson_not_passed()
 
         number_int = int(number)
-        serializer = Lessons.get_lesson_results_serializer_or_404(
+        serializer = Lessons.get_lesson_answers_serializer_or_404(
             number_int, data=request.data)
         serializer.is_valid(raise_exception=True)
         n = get_n(request)
-        results = serializer.validated_data
-        lesson_results = Lessons.get_lesson_results_or_404(number_int, n,
-                                                           results)
-        check_results = lesson_results.check()
+        answers = serializer.validated_data
+        lesson_answers = Lessons.get_lesson_answers_or_404(number_int, n,
+                                                           answers)
+        check_results = lesson_answers.check()
 
         student = request.user.student
         lesson_result = LessonResult.objects.create(student=student,
                                                     lesson_number=number_int,
                                                     grade=0)
         task_answers = []
-        for number, answer_key in enumerate(results['answers'], 1):
-            answer = results['answers'][answer_key]
+        for number, answer_key in enumerate(answers['answers'], 1):
+            answer = answers['answers'][answer_key]
             right = check_results[answer_key]
             task_answer = TaskResult(
                 lesson_result=lesson_result, task_number=number, right=right,

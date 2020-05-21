@@ -1,4 +1,4 @@
-from lessons.lessons.l2.lesson_results import Lesson2Results
+from lessons.lessons.l2.lesson_answers import Lesson2Answers
 
 
 def test_check():
@@ -14,8 +14,8 @@ def test_check():
             'z': 1,
         },
     }
-    lesson_results = Lesson2Results(n=1, **answers)
-    for result in lesson_results.check().values():
+    lesson_answers = Lesson2Answers(n=1, **answers)
+    for result in lesson_answers.check().values():
         assert result
 
 
@@ -32,6 +32,6 @@ def test_check_fail():
             'z': 199,
         },
     }
-    lesson_results = Lesson2Results(n=1, **answers)
-    for result in lesson_results.check().values():
+    lesson_answers = Lesson2Answers(n=1, **answers)
+    for result in lesson_answers.check().values():
         assert not result

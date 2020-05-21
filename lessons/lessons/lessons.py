@@ -5,20 +5,20 @@ from users.models import Student
 from lessons.base import (
     LessonBase,
     LessonBasicBase,
-    LessonResultsBase,
-    LessonResultsBaseSerializer,
+    LessonAnswersBase,
+    LessonAnswersBaseSerializer,
 )
 from .l1.lesson import Lesson1, Lesson1Basic
-from .l1.lesson_results import Lesson1Results
+from .l1.lesson_answers import Lesson1Answers
 from .l2.lesson import Lesson2, Lesson2Basic
-from .l2.lesson_results import Lesson2Results
+from .l2.lesson_answers import Lesson2Answers
 
 
 class Lessons:
     lessons: List[Tuple[
-        Type[LessonBasicBase], Type[LessonBase], Type[LessonResultsBase]]] = [
-        (Lesson1Basic, Lesson1, Lesson1Results),
-        (Lesson2Basic, Lesson2, Lesson2Results),
+        Type[LessonBasicBase], Type[LessonBase], Type[LessonAnswersBase]]] = [
+        (Lesson1Basic, Lesson1, Lesson1Answers),
+        (Lesson2Basic, Lesson2, Lesson2Answers),
     ]
 
     @staticmethod
@@ -41,49 +41,49 @@ class Lessons:
         return lesson
 
     @staticmethod
-    def get_lesson_results_serializer(
+    def get_lesson_answers_serializer(
         number: int,
         *args,
         **kwargs,
-    ) -> Optional[LessonResultsBaseSerializer]:
+    ) -> Optional[LessonAnswersBaseSerializer]:
         index = number - 1
         if index >= len(Lessons.lessons):
             return None
-        _, _, lesson_results = Lessons.lessons[index]
-        serializer_class = lesson_results.serializer
+        _, _, lesson_answers = Lessons.lessons[index]
+        serializer_class = lesson_answers.serializer
         return serializer_class(*args, **kwargs)
 
     @staticmethod
-    def get_lesson_results_serializer_or_404(
+    def get_lesson_answers_serializer_or_404(
         number: int,
         *args,
         **kwargs,
-    ) -> LessonResultsBaseSerializer:
-        serializer = Lessons.get_lesson_results_serializer(number, *args,
+    ) -> LessonAnswersBaseSerializer:
+        serializer = Lessons.get_lesson_answers_serializer(number, *args,
                                                            **kwargs)
         if serializer is None:
             raise Http404()
         return serializer
 
     @staticmethod
-    def get_lesson_results(
+    def get_lesson_answers(
         number: int,
         n: int,
-        results: Dict[str, Mapping[str, Any]],
-    ) -> Optional[LessonResultsBase]:
+        answers: Dict[str, Mapping[str, Any]],
+    ) -> Optional[LessonAnswersBase]:
         index = number - 1
         if index >= len(Lessons.lessons):
             return None
-        _, _, lesson_results = Lessons.lessons[index]
-        return lesson_results(n, **results['answers'])
+        _, _, lesson_answers = Lessons.lessons[index]
+        return lesson_answers(n, **answers['answers'])
 
     @staticmethod
-    def get_lesson_results_or_404(
+    def get_lesson_answers_or_404(
         number: int,
         n: int,
-        results: Dict[str, Mapping[str, Any]],
-    ) -> LessonResultsBase:
-        lesson_results = Lessons.get_lesson_results(number, n, results)
-        if lesson_results is None:
+        answers: Dict[str, Mapping[str, Any]],
+    ) -> LessonAnswersBase:
+        lesson_answers = Lessons.get_lesson_answers(number, n, answers)
+        if lesson_answers is None:
             raise Http404()
-        return lesson_results
+        return lesson_answers
