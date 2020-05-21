@@ -4,12 +4,12 @@ from rest_framework.serializers import Serializer
 from .answer import AnswerBase
 
 
-class LessonResultsBaseSerializer(Serializer):
+class LessonAnswersBaseSerializer(Serializer):
     pass
 
 
-class LessonResultsBase:
-    serializer: Type[LessonResultsBaseSerializer]
+class LessonAnswersBase:
+    serializer: Type[LessonAnswersBaseSerializer]
     answers: Dict[str, AnswerBase]
 
     def __init__(self, n: int, **kwargs: Dict[str, Mapping[str, Any]]) -> None:

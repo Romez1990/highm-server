@@ -2,8 +2,8 @@ from typing import Mapping, Any
 from rest_framework.serializers import Serializer
 
 from lessons.base import (
-    LessonResultsBaseSerializer,
-    LessonResultsBase,
+    LessonAnswersBaseSerializer,
+    LessonAnswersBase,
 )
 from .tasks.t1.answer import Answer1, Answer1Serializer
 from .tasks.t2.answer import Answer2, Answer2Serializer
@@ -22,12 +22,12 @@ class Lesson1AnswersSerializer(Serializer):
     answer6 = Answer6Serializer()
 
 
-class Lesson1ResultSerializer(LessonResultsBaseSerializer):
+class Lesson1AnswerSerializer(LessonAnswersBaseSerializer):
     answers = Lesson1AnswersSerializer()
 
 
-class Lesson1Results(LessonResultsBase):
-    serializer = Lesson1ResultSerializer
+class Lesson1Answers(LessonAnswersBase):
+    serializer = Lesson1AnswerSerializer
 
     def __init__(
         self,

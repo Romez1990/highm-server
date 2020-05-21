@@ -1,4 +1,4 @@
-from lessons.lessons.l1.lesson_results import Lesson1Results
+from lessons.lessons.l1.lesson_answers import Lesson1Answers
 
 
 def test_check():
@@ -35,8 +35,8 @@ def test_check():
             'determinant': 227,
         }
     }
-    lesson_results = Lesson1Results(n=1, **answers)
-    for result in lesson_results.check().values():
+    lesson_answers = Lesson1Answers(n=1, **answers)
+    for result in lesson_answers.check().values():
         assert result
 
 
@@ -74,6 +74,6 @@ def test_check_fail():
             'determinant': 22799,
         }
     }
-    lesson_results = Lesson1Results(n=1, **answers)
-    for result in lesson_results.check().values():
+    lesson_answers = Lesson1Answers(n=1, **answers)
+    for result in lesson_answers.check().values():
         assert not result

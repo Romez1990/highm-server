@@ -5,9 +5,9 @@ from .lesson import (
     LessonBasicSerializer,
     LessonBaseSerializer,
 )
-from .lesson_results import (
-    LessonResultsBase,
-    LessonResultsBaseSerializer,
+from .lesson_answers import (
+    LessonAnswersBase,
+    LessonAnswersBaseSerializer,
 )
 from .task import TaskBase, TaskSerializerBase
 from .answer import AnswerBase, AnswerSerializerBase
