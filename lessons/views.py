@@ -26,23 +26,19 @@ class LessonViewSet(ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request: Request, number: str) -> Response:
+        self.check_lesson_not_passed()
+
+        number_int = int(number)
         n = get_n(request)
-        lesson = Lessons.get_lesson_or_404(int(number), n)
+        lesson = Lessons.get_lesson_or_404(number_int, n)
         serializer = lesson.serializer(lesson)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def check(self, request: Request, number: str) -> Response:
-        student = request.user.student
+        self.check_lesson_not_passed()
+
         number_int = int(number)
-
-        queryset = LessonResult.objects.filter(student=student,
-                                               lesson_number=number_int)
-        if queryset.exists():
-            raise ValidationError({
-                'detail': 'This lesson has been passed.'
-            })
-
         serializer = Lessons.get_lesson_results_serializer_or_404(
             number_int, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -52,16 +48,30 @@ class LessonViewSet(ViewSet):
                                                            results)
         check_results = lesson_results.check()
 
+        student = request.user.student
         lesson_result = LessonResult.objects.create(student=student,
                                                     lesson_number=number_int,
                                                     grade=0)
         task_answers = []
-        for number, answer in enumerate(results['answers'].values(), 1):
-            task_answer = TaskResult(lesson_result=lesson_result,
-                                     task_number=number, answer=answer)
+        for number, answer_key in enumerate(results['answers'], 1):
+            answer = results['answers'][answer_key]
+            right = check_results[answer_key]
+            task_answer = TaskResult(
+                lesson_result=lesson_result, task_number=number, right=right,
+                answer=answer)
             task_answers.append(task_answer)
         TaskResult.objects.bulk_create(task_answers)
 
         return Response({
             'results': check_results
         })
+
+    def check_lesson_not_passed(self) -> None:
+        student = self.request.user.student
+        number_int = int(self.kwargs['number'])
+        queryset = LessonResult.objects.filter(student=student,
+                                               lesson_number=number_int)
+        if queryset.exists():
+            raise ValidationError({
+                'detail': 'This lesson has been passed.'
+            })
