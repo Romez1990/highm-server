@@ -15,7 +15,8 @@ def test_check():
         },
     }
     lesson_results = Lesson2Results(n=1, **answers)
-    [assert_true(result) for result in lesson_results.check().values()]
+    for result in lesson_results.check().values():
+        assert result
 
 
 def test_check_fail():
@@ -32,12 +33,5 @@ def test_check_fail():
         },
     }
     lesson_results = Lesson2Results(n=1, **answers)
-    [assert_false(result) for result in lesson_results.check().values()]
-
-
-def assert_true(result: bool) -> None:
-    assert result
-
-
-def assert_false(result: bool) -> None:
-    assert not result
+    for result in lesson_results.check().values():
+        assert not result
