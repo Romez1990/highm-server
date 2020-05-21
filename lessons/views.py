@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -67,11 +68,14 @@ class LessonViewSet(ViewSet):
         })
 
     def check_lesson_not_passed(self) -> None:
-        student = self.request.user.student
-        number_int = int(self.kwargs['number'])
-        queryset = LessonResult.objects.filter(student=student,
-                                               lesson_number=number_int)
+        queryset = self.get_queryset()
         if queryset.exists():
             raise ValidationError({
                 'detail': 'This lesson has been passed.'
             })
+
+    def get_queryset(self) -> QuerySet:
+        student = self.request.user.student
+        number_int = int(self.kwargs['number'])
+        return LessonResult.objects.filter(student=student,
+                                           lesson_number=number_int)
