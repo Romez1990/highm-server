@@ -14,6 +14,7 @@ from .models import (
     TaskResult,
 )
 from .serializers import LessonResultSerializer
+from .utils.grade import get_grade
 
 
 class LessonViewSet(ViewSet):
@@ -50,10 +51,15 @@ class LessonViewSet(ViewSet):
                                                            answers)
         check_results = lesson_answers.check()
 
+        bin_check_results = [1 if result else 0
+                             for result in check_results.values()]
+        percent_right = sum(bin_check_results) / len(bin_check_results)
+        grade = get_grade(percent_right)
+
         student = request.user.student
         lesson_result = LessonResult.objects.create(student=student,
                                                     lesson_number=number_int,
-                                                    grade=0)
+                                                    grade=grade)
         task_answers = []
         for number, answer_key in enumerate(answers['answers'], 1):
             answer = answers['answers'][answer_key]
