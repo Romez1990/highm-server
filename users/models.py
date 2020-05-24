@@ -48,6 +48,9 @@ class Student(Model):
 
     @property
     def n(self):
+        if self.user.is_superuser:
+            return 1
+
         students = self.group.students.order_by('user__first_name',
                                                 'user__last_name')
         for index, student in enumerate(students):
