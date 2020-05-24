@@ -94,15 +94,6 @@ class RegistrableModelViewSet(ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=HTTP_201_CREATED)
 
-    def destroy(self, *args, **kwargs) -> Response:
-        if self.is_registered():
-            raise ValidationError({
-                'non_field_errors': [
-                    'Cannot delete a registered user.'
-                ]
-            })
-        return super().destroy(*args, **kwargs)
-
 
 class StudentViewSet(RegistrableModelViewSet):
     permission_classes = [IsTeacher]
