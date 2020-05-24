@@ -51,12 +51,16 @@ class Student(Model):
         if self.user.is_superuser:
             return 1
 
-        students = self.group.students.order_by('user__first_name',
+        users = self.group.students.values_list('user__first_name',
                                                 'user__last_name')
-        for index, student in enumerate(students):
-            if student == self:
-                return index + 1
-        raise ValueError('Student must be found')
+        unregistered_users = self.group.unregistered_students.values_list(
+            'first_name', 'last_name')
+        # it's already ordered
+        all_users = users.union(unregistered_users)
+        for number, (first_name, last_name) in enumerate(all_users, 1):
+            if last_name == self.user.last_name and \
+                    first_name == self.user.first_name:
+                return number
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
