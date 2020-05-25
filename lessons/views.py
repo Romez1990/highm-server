@@ -27,7 +27,7 @@ from .utils.grade import get_grade
 class LessonViewSet(ViewSet):
     permission_classes = [IsStudent]
     lookup_field = 'number'
-    lookup_value_regex = r'\d+'
+    lookup_value_regex = r'\d{1,2}'
 
     def list(self, request: Request) -> Response:
         student = request.user.student
