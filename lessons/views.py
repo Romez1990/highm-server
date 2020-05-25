@@ -3,17 +3,23 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import (
+    ValidationError,
+)
 
 from users.permissions import IsStudent
 from users.utils import get_n
-from .base import LessonBasicSerializer
+from .base import (
+    LessonBasicSerializer,
+)
 from .lessons import Lessons
 from .models import (
     LessonResult,
     TaskResult,
 )
-from .serializers import LessonResultSerializer
+from .serializers import (
+    LessonResultSerializer,
+)
 from .utils.grade import get_grade
 
 
