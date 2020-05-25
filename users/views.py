@@ -189,7 +189,7 @@ class EmailVerificationKeyCheckView(VerifyEmailViewBase):
 
 class VerifyEmailView(VerifyEmailViewBase):
     def get(self, request: Request) -> Response:
-        raise MethodNotAllowed('GET')
+        raise MethodNotAllowed(request.method)
 
     def post(self, request: Request, *args, **kwargs) -> Response:
         try:
