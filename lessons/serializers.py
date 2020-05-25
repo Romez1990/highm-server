@@ -17,6 +17,12 @@ class TaskResultForStudentSerializer(ModelSerializer):
         fields = ['task_number', 'right']
 
 
+class TaskResultForStatementSerializer(ModelSerializer):
+    class Meta:
+        model = TaskResult
+        fields = ['task_number', 'right', 'answer']
+
+
 class LessonResultForStudentSerializer(ModelSerializer):
     class Meta:
         model = LessonResult
@@ -31,3 +37,11 @@ class LessonResultForStatementSerializer(ModelSerializer):
         fields = ['id', 'student', 'grade']
 
     student = StudentBasicSerializer()
+
+
+class LessonResultForStatementAnswersSerializer(ModelSerializer):
+    class Meta:
+        model = LessonResult
+        fields = ['task_results']
+
+    task_results = TaskResultForStatementSerializer(many=True)

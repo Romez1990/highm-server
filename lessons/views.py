@@ -2,7 +2,7 @@ from typing import Dict, Any
 from django.db.models import QuerySet
 from rest_framework.generics import (
     ListAPIView,
-    DestroyAPIView,
+    RetrieveDestroyAPIView,
 )
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
@@ -27,6 +27,7 @@ from .models import (
 from .serializers import (
     LessonResultForStudentSerializer,
     LessonResultForStatementSerializer,
+    LessonResultForStatementAnswersSerializer,
 )
 from .utils.grade import get_grade
 
@@ -149,8 +150,9 @@ class StatementListView(ListAPIView, StatementMixin):
         return queryset.exclude(student__group__name=GROUP_ADMINS)
 
 
-class StatementDetailView(DestroyAPIView, StatementMixin):
+class StatementDetailView(RetrieveDestroyAPIView, StatementMixin):
     permission_classes = [IsTeacher]
+    serializer_class = LessonResultForStatementAnswersSerializer
 
     def get_object(self) -> LessonResult:
         group = self.get_group()
