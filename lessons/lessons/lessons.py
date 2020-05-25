@@ -1,5 +1,5 @@
 from typing import List, Tuple, Type, Optional, Dict, Mapping, Any
-from django.http import Http404
+from rest_framework.exceptions import NotFound
 
 from users.models import Student
 from lessons.base import (
@@ -37,7 +37,7 @@ class Lessons:
     def get_lesson_or_404(number: int, n: int) -> LessonBase:
         lesson = Lessons.get_lesson(number, n)
         if lesson is None:
-            raise Http404()
+            raise NotFound()
         return lesson
 
     @staticmethod
@@ -62,7 +62,7 @@ class Lessons:
         serializer = Lessons.get_lesson_answers_serializer(number, *args,
                                                            **kwargs)
         if serializer is None:
-            raise Http404()
+            raise NotFound()
         return serializer
 
     @staticmethod
@@ -85,5 +85,5 @@ class Lessons:
     ) -> LessonAnswersBase:
         lesson_answers = Lessons.get_lesson_answers(number, n, answers)
         if lesson_answers is None:
-            raise Http404()
+            raise NotFound()
         return lesson_answers
