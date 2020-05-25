@@ -5,6 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.exceptions import (
     ValidationError,
+    NotFound,
 )
 
 from users.permissions import IsStudent
@@ -100,9 +101,7 @@ class LessonViewSet(ViewSet):
     def check_lesson_passed(self) -> None:
         queryset = self.get_queryset()
         if not queryset.exists():
-            raise ValidationError({
-                'detail': 'No results for this lesson.'
-            })
+            raise NotFound('No results found.')
 
     def get_queryset(self) -> QuerySet:
         student = self.request.user.student
