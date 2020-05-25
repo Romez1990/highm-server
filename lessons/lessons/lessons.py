@@ -22,6 +22,11 @@ class Lessons:
     ]
 
     @staticmethod
+    def lesson_exists(number: int) -> bool:
+        return any(map(lambda lesson: lesson[0].number == number,
+                       Lessons.lessons))
+
+    @staticmethod
     def get_lesson_list(student: Student) -> List[LessonBasicBase]:
         return [lesson_basic(student) for lesson_basic, _, _ in Lessons.lessons]
 
