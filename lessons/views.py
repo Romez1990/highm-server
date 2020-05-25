@@ -1,4 +1,9 @@
+from typing import Dict, Any
 from django.db.models import QuerySet
+from rest_framework.generics import (
+    ListAPIView,
+    DestroyAPIView,
+)
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -8,7 +13,8 @@ from rest_framework.exceptions import (
     NotFound,
 )
 
-from users.permissions import IsStudent
+from users.permissions import IsStudent, IsTeacher
+from users.models import Group, GROUP_ADMINS
 from users.utils import get_n
 from .base import (
     LessonBasicSerializer,
@@ -19,7 +25,8 @@ from .models import (
     TaskResult,
 )
 from .serializers import (
-    LessonResultSerializer,
+    LessonResultForStudentSerializer,
+    LessonResultForStatementSerializer,
 )
 from .utils.grade import get_grade
 
@@ -88,7 +95,7 @@ class LessonViewSet(ViewSet):
         number_int = int(number)
         results = LessonResult.objects.get(student=student,
                                            lesson_number=number_int)
-        serializer = LessonResultSerializer(results)
+        serializer = LessonResultForStudentSerializer(results)
         return Response(serializer.data)
 
     def check_lesson_not_passed(self) -> None:
@@ -108,3 +115,45 @@ class LessonViewSet(ViewSet):
         number_int = int(self.kwargs['number'])
         return LessonResult.objects.filter(student=student,
                                            lesson_number=number_int)
+
+
+class StatementMixin:
+    kwargs: Dict[str, Any]
+
+    def get_group(self) -> str:
+        group = self.kwargs['group']
+        group_queryset = Group.objects.filter(name=group)
+        if not group_queryset.exists():
+            raise NotFound('Group not found.')
+        return group
+
+    def get_lesson(self) -> int:
+        lesson = int(self.kwargs['lesson'])
+        if not Lessons.lesson_exists(lesson):
+            raise NotFound('Lesson not found.')
+        return lesson
+
+
+class StatementListView(ListAPIView, StatementMixin):
+    permission_classes = [IsTeacher]
+    serializer_class = LessonResultForStatementSerializer
+
+    def get_queryset(self) -> QuerySet:
+        group = self.get_group()
+        lesson = self.get_lesson()
+        queryset = LessonResult.objects.filter(student__group__name=group,
+                                               lesson_number=lesson)
+        user = self.request.user
+        if user.is_superuser:
+            return queryset
+        return queryset.exclude(student__group__name=GROUP_ADMINS)
+
+
+class StatementDetailView(DestroyAPIView, StatementMixin):
+    permission_classes = [IsTeacher]
+
+    def get_object(self) -> LessonResult:
+        group = self.get_group()
+        lesson = self.get_lesson()
+        return LessonResult.objects.get(student__group__name=group,
+                                        lesson_number=lesson)
