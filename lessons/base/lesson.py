@@ -31,7 +31,10 @@ class LessonBasicBase(LessonBasicBaseBase):
     number: int
     passed: bool
 
-    def __init__(self, student: Student) -> None:
+    def __init__(self, student: Student = None) -> None:
+        if student is None:
+            return
+
         queryset = LessonResult.objects.filter(student=student,
                                                lesson_number=self.number)
         self.passed = queryset.exists()
