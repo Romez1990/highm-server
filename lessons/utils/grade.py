@@ -7,7 +7,7 @@ grades = [
 ]
 
 
-def get_grade(percent_right: float) -> int:
+def get_grade(percent_correct: float) -> int:
     for grade, min_percent in grades:
-        if percent_right >= min_percent:
+        if percent_correct >= min_percent:
             return grade

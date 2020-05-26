@@ -14,13 +14,13 @@ from .models import (
 class TaskResultForStudentSerializer(ModelSerializer):
     class Meta:
         model = TaskResult
-        fields = ['task_number', 'right']
+        fields = ['task_number', 'correct']
 
 
 class TaskResultForStatementSerializer(ModelSerializer):
     class Meta:
         model = TaskResult
-        fields = ['task_number', 'right', 'answer']
+        fields = ['task_number', 'correct', 'answer']
 
 
 class LessonResultForStudentSerializer(ModelSerializer):
