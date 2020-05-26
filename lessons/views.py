@@ -21,6 +21,7 @@ from .models import (
     TaskResult,
 )
 from .serializers import (
+    LessonForTeacherSerializer,
     LessonResultForStudentSerializer,
     LessonResultForStatementSerializer,
     LessonResultForStatementAnswersSerializer,
@@ -110,6 +111,28 @@ class LessonViewSet(ViewSet):
         number_int = int(self.kwargs['number'])
         return LessonResult.objects.filter(student=student,
                                            lesson_number=number_int)
+
+
+class LessonForTeacherViewSet(ModelViewSet):
+    permission_classes = [IsTeacher]
+
+    serializer_classes = {
+        'list': LessonForTeacherSerializer,
+        'create': LessonForTeacherSerializer,
+        'retrieve': LessonForTeacherSerializer,
+        'update': LessonForTeacherSerializer,
+        'partial_update': LessonForTeacherSerializer,
+        'destroy': LessonForTeacherSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes[self.action]
+
+    def get_queryset(self):
+        return Lessons.get_lesson_list_for_teacher()
+
+    def get_object(self):
+        return ...
 
 
 class StatementViewSet(ModelViewSet):
