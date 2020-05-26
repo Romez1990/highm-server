@@ -35,7 +35,7 @@ from .utils.grade import get_grade
 class LessonViewSet(ViewSet):
     permission_classes = [IsStudent]
     lookup_field = 'number'
-    lookup_value_regex = r'\d{1,2}'
+    lookup_type = 'int'
 
     def list(self, request: Request) -> Response:
         student = request.user.student
@@ -43,27 +43,24 @@ class LessonViewSet(ViewSet):
         serializer = LessonBasicSerializer(lessons, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request: Request, number: str) -> Response:
+    def retrieve(self, request: Request, number: int) -> Response:
         self.check_lesson_not_passed()
 
-        number_int = int(number)
         n = get_n(request)
-        lesson = Lessons.get_lesson_or_404(number_int, n)
+        lesson = Lessons.get_lesson_or_404(number, n)
         serializer = lesson.serializer(lesson)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    def check(self, request: Request, number: str) -> Response:
+    def check(self, request: Request, number: int) -> Response:
         self.check_lesson_not_passed()
 
-        number_int = int(number)
         serializer = Lessons.get_lesson_answers_serializer_or_404(
-            number_int, data=request.data)
+            number, data=request.data)
         serializer.is_valid(raise_exception=True)
         n = get_n(request)
         answers = serializer.validated_data
-        lesson_answers = Lessons.get_lesson_answers_or_404(number_int, n,
-                                                           answers)
+        lesson_answers = Lessons.get_lesson_answers_or_404(number, n, answers)
         check_results = lesson_answers.check()
 
         bin_check_results = [1 if result else 0
@@ -74,7 +71,7 @@ class LessonViewSet(ViewSet):
 
         student = request.user.student
         lesson_result = LessonResult.objects.create(
-            student=student, lesson_number=number_int, n=n,
+            student=student, lesson_number=number, n=n,
             percent_correct=percent_correct, grade=grade)
         task_answers = []
         for number, answer_key in enumerate(answers['answers'], 1):
