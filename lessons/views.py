@@ -1,16 +1,12 @@
-from typing import Dict, Any
 from django.db.models import QuerySet
-from rest_framework.generics import (
-    ListAPIView,
-    RetrieveDestroyAPIView,
-)
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.exceptions import (
     ValidationError,
     NotFound,
+    MethodNotAllowed,
 )
 
 from users.permissions import IsStudent, IsTeacher
@@ -116,8 +112,39 @@ class LessonViewSet(ViewSet):
                                            lesson_number=number_int)
 
 
-class StatementMixin:
-    kwargs: Dict[str, Any]
+class StatementViewSet(ModelViewSet):
+    permission_classes = [IsTeacher]
+
+    serializer_classes = {
+        'list': LessonResultForStatementSerializer,
+        'create': LessonResultForStatementAnswersSerializer,
+        'retrieve': LessonResultForStatementAnswersSerializer,
+        'update': LessonResultForStatementAnswersSerializer,
+        'partial_update': LessonResultForStatementAnswersSerializer,
+        'destroy': LessonResultForStatementAnswersSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes[self.action]
+
+    def get_queryset(self) -> QuerySet:
+        group = self.get_group()
+        lesson = self.get_lesson()
+        queryset = LessonResult.objects.filter(student__group__name=group,
+                                               lesson_number=lesson)
+        user = self.request.user
+        if user.is_superuser:
+            return queryset
+        return queryset.exclude(student__group__name=GROUP_ADMINS)
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def update(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
 
     def get_group(self) -> str:
         group = self.kwargs['group']
@@ -131,29 +158,3 @@ class StatementMixin:
         if not Lessons.lesson_exists(lesson):
             raise NotFound('Lesson not found.')
         return lesson
-
-
-class StatementListView(ListAPIView, StatementMixin):
-    permission_classes = [IsTeacher]
-    serializer_class = LessonResultForStatementSerializer
-
-    def get_queryset(self) -> QuerySet:
-        group = self.get_group()
-        lesson = self.get_lesson()
-        queryset = LessonResult.objects.filter(student__group__name=group,
-                                               lesson_number=lesson)
-        user = self.request.user
-        if user.is_superuser:
-            return queryset
-        return queryset.exclude(student__group__name=GROUP_ADMINS)
-
-
-class StatementDetailView(RetrieveDestroyAPIView, StatementMixin):
-    permission_classes = [IsTeacher]
-    serializer_class = LessonResultForStatementAnswersSerializer
-
-    def get_object(self) -> LessonResult:
-        group = self.get_group()
-        lesson = self.get_lesson()
-        return LessonResult.objects.get(student__group__name=group,
-                                        lesson_number=lesson)
