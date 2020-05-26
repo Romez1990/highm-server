@@ -15,7 +15,7 @@ from .l2.lesson_answers import Lesson2Answers
 
 
 class Lessons:
-    lessons: List[Tuple[
+    _lessons: List[Tuple[
         Type[LessonBasicBase], Type[LessonBase], Type[LessonAnswersBase]]] = [
         (Lesson1Basic, Lesson1, Lesson1Answers),
         (Lesson2Basic, Lesson2, Lesson2Answers),
@@ -24,18 +24,18 @@ class Lessons:
     @staticmethod
     def lesson_exists(number: int) -> bool:
         return any(map(lambda lesson: lesson[0].number == number,
-                       Lessons.lessons))
+                       Lessons._lessons))
 
     @staticmethod
     def get_lesson_list(student: Student) -> List[LessonBasicBase]:
-        return [lesson_basic(student) for lesson_basic, _, _ in Lessons.lessons]
+        return [lesson_basic(student) for lesson_basic, _, _ in Lessons._lessons]
 
     @staticmethod
     def get_lesson(number: int, n: int) -> Optional[LessonBase]:
         index = number - 1
-        if index >= len(Lessons.lessons):
+        if index >= len(Lessons._lessons):
             return None
-        _, lesson, _ = Lessons.lessons[index]
+        _, lesson, _ = Lessons._lessons[index]
         return lesson(n)
 
     @staticmethod
@@ -52,9 +52,9 @@ class Lessons:
         **kwargs,
     ) -> Optional[LessonAnswersBaseSerializer]:
         index = number - 1
-        if index >= len(Lessons.lessons):
+        if index >= len(Lessons._lessons):
             return None
-        _, _, lesson_answers = Lessons.lessons[index]
+        _, _, lesson_answers = Lessons._lessons[index]
         serializer_class = lesson_answers.serializer
         return serializer_class(*args, **kwargs)
 
@@ -77,9 +77,9 @@ class Lessons:
         answers: Dict[str, Mapping[str, Any]],
     ) -> Optional[LessonAnswersBase]:
         index = number - 1
-        if index >= len(Lessons.lessons):
+        if index >= len(Lessons._lessons):
             return None
-        _, _, lesson_answers = Lessons.lessons[index]
+        _, _, lesson_answers = Lessons._lessons[index]
         return lesson_answers(n, **answers['answers'])
 
     @staticmethod
