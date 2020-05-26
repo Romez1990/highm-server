@@ -39,7 +39,7 @@ class LessonViewSet(ViewSet):
 
     def list(self, request: Request) -> Response:
         student = request.user.student
-        lessons = Lessons.get_lesson_list(student)
+        lessons = Lessons.get_lesson_list_for_student(student)
         serializer = LessonBasicSerializer(lessons, many=True)
         return Response(serializer.data)
 

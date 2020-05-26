@@ -26,8 +26,12 @@ class Lessons:
         return 1 <= number <= len(Lessons._lessons)
 
     @staticmethod
-    def get_lesson_list(student: Student) -> List[LessonBasicBase]:
+    def get_lesson_list_for_student(student: Student) -> List[LessonBasicBase]:
         return [lesson_basic(student) for lesson_basic, _, _ in Lessons._lessons]
+
+    @staticmethod
+    def get_lesson_list_for_teacher():
+        return [lesson_basic() for lesson_basic, _, _ in Lessons._lessons]
 
     @staticmethod
     def get_lesson(number: int, n: int) -> Optional[LessonBase]:
