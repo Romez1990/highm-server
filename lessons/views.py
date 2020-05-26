@@ -73,9 +73,9 @@ class LessonViewSet(ViewSet):
         grade = get_grade(percent_correct)
 
         student = request.user.student
-        lesson_result = LessonResult.objects.create(student=student,
-                                                    lesson_number=number_int,
-                                                    grade=grade)
+        lesson_result = LessonResult.objects.create(
+            student=student, lesson_number=number_int, n=n,
+            percent_correct=percent_correct, grade=grade)
         task_answers = []
         for number, answer_key in enumerate(answers['answers'], 1):
             answer = answers['answers'][answer_key]
