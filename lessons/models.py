@@ -18,6 +18,8 @@ from users.models import (
 class LessonResult(Model):
     student = ForeignKey(Student, CASCADE)
     lesson_number = IntegerField()
+    n = IntegerField()
+    percent_correct = IntegerField()
     grade = FloatField()
 
     class Meta:

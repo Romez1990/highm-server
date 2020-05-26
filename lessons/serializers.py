@@ -26,7 +26,7 @@ class TaskResultForStatementSerializer(ModelSerializer):
 class LessonResultForStudentSerializer(ModelSerializer):
     class Meta:
         model = LessonResult
-        fields = ['grade', 'task_results']
+        fields = ['grade', 'percent_correct', 'task_results']
 
     task_results = TaskResultForStudentSerializer(many=True)
 
@@ -34,7 +34,7 @@ class LessonResultForStudentSerializer(ModelSerializer):
 class LessonResultForStatementSerializer(ModelSerializer):
     class Meta:
         model = LessonResult
-        fields = ['id', 'student', 'grade']
+        fields = ['id', 'student', 'n', 'percent_correct', 'grade']
 
     student = StudentBasicSerializer()
 
