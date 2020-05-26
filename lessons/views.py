@@ -81,8 +81,8 @@ class LessonViewSet(ViewSet):
             answer = answers['answers'][answer_key]
             correct = check_results[answer_key]
             task_answer = TaskResult(
-                lesson_result=lesson_result, task_number=number, correct=correct,
-                answer=answer)
+                lesson_result=lesson_result, task_number=number,
+                correct=correct, answer=answer)
             task_answers.append(task_answer)
         TaskResult.objects.bulk_create(task_answers)
 
