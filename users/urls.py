@@ -14,6 +14,11 @@ from .views import (
     VerifyEmailView,
 )
 
+router = SimpleRouter()
+router.register('student', StudentViewSet, basename='student')
+router.register('teacher', TeacherViewSet, basename='teacher')
+router.register('group', GroupViewSet, basename='group')
+
 urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
@@ -25,14 +30,9 @@ urlpatterns = [
     path('auth/email-verification-key-check/',
          EmailVerificationKeyCheckView.as_view(),
          name='email_verification_key_check'),
+    path('', include(router.urls)),
     path('accounts/', include('allauth.urls')),
 ]
-
-router = SimpleRouter()
-router.register('student', StudentViewSet, basename='student')
-router.register('teacher', TeacherViewSet, basename='teacher')
-router.register('group', GroupViewSet, basename='group')
-urlpatterns += router.urls
 
 if DEBUG:
     urlpatterns += [
