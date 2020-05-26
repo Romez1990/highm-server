@@ -68,7 +68,8 @@ class LessonViewSet(ViewSet):
 
         bin_check_results = [1 if result else 0
                              for result in check_results.values()]
-        percent_correct = sum(bin_check_results) / len(bin_check_results)
+        percent_correct = round(
+            sum(bin_check_results) / len(bin_check_results) * 100)
         grade = get_grade(percent_correct)
 
         student = request.user.student
