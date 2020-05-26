@@ -1,5 +1,7 @@
 from rest_framework.serializers import (
     ModelSerializer,
+    Serializer,
+    CharField,
 )
 
 from users.serializers import (
@@ -9,6 +11,10 @@ from .models import (
     TaskResult,
     LessonResult,
 )
+
+
+class LessonForTeacherSerializer(Serializer):
+    title = CharField(max_length=150)
 
 
 class TaskResultForStudentSerializer(ModelSerializer):
