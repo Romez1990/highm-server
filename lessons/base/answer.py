@@ -22,8 +22,4 @@ class AnswerBase:
     def check(self) -> bool:
         if not self._steps:
             raise ValueError(f'steps are empty at {self.__class__.__name__}')
-        return all(map(lambda step: self._step_check(step), self._steps))
-
-    def _step_check(self, step_type: Type[StepBase]) -> bool:
-        step = step_type()
-        return step.check(self)
+        return all(step().check(self) for step in self._steps)
