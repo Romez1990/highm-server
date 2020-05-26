@@ -28,7 +28,7 @@ class TaskResult(Model):
     lesson_result = ForeignKey(LessonResult, CASCADE,
                                related_name='task_results')
     task_number = IntegerField()
-    right = BooleanField()
+    correct = BooleanField()
     answer = JSONField()
 
     class Meta:

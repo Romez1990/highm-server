@@ -68,8 +68,8 @@ class LessonViewSet(ViewSet):
 
         bin_check_results = [1 if result else 0
                              for result in check_results.values()]
-        percent_right = sum(bin_check_results) / len(bin_check_results)
-        grade = get_grade(percent_right)
+        percent_correct = sum(bin_check_results) / len(bin_check_results)
+        grade = get_grade(percent_correct)
 
         student = request.user.student
         lesson_result = LessonResult.objects.create(student=student,
@@ -78,9 +78,9 @@ class LessonViewSet(ViewSet):
         task_answers = []
         for number, answer_key in enumerate(answers['answers'], 1):
             answer = answers['answers'][answer_key]
-            right = check_results[answer_key]
+            correct = check_results[answer_key]
             task_answer = TaskResult(
-                lesson_result=lesson_result, task_number=number, right=right,
+                lesson_result=lesson_result, task_number=number, correct=correct,
                 answer=answer)
             task_answers.append(task_answer)
         TaskResult.objects.bulk_create(task_answers)
