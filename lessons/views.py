@@ -7,6 +7,7 @@ from rest_framework.exceptions import (
 )
 
 from users.permissions import IsStudent
+from users.utils import get_n
 from .serializers import (
     LessonBasicSerializer,
 )
@@ -15,6 +16,8 @@ from .lessons import Lessons
 
 class LessonViewSet(ModelViewSet):
     permission_classes = [IsStudent]
+    lookup_field = 'number'
+    lookup_type = 'int'
 
     serializer_classes = {
         'list': LessonBasicSerializer,
@@ -26,15 +29,20 @@ class LessonViewSet(ModelViewSet):
     }
 
     def get_serializer_class(self):
+        number = self.kwargs.get('number', None)
+        if self.action == 'retrieve':
+            return Lessons.get_lesson_serializer_class(number)
         return self.serializer_classes[self.action]
 
     def get_queryset(self):
         return Lessons.get_list()
 
-    def create(self, request: Request, *args, **kwargs) -> Response:
-        raise MethodNotAllowed(request.method)
+    def get_object(self):
+        number = self.kwargs['number']
+        n = get_n(self.request)
+        return Lessons.get_lesson_or_404(number, n)
 
-    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args, **kwargs) -> Response:
         raise MethodNotAllowed(request.method)
 
     def update(self, request: Request, *args, **kwargs) -> Response:

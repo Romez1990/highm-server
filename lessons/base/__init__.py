@@ -3,3 +3,6 @@ from .lesson import (
     LessonBasicBase,
     LessonBase,
 )
+from .task import (
+    TaskBase,
+)
