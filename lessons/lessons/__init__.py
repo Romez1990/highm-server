@@ -1,1 +1,2 @@
 from .lessons_for_student import LessonsForStudent
+from .lessons_for_teacher import LessonsForTeacher

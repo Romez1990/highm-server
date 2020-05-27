@@ -7,13 +7,17 @@ from rest_framework.exceptions import (
 )
 
 from users.permissions import IsTeacher
+from .lessons import LessonsForTeacher
+from .serializers_for_teacher import (
+    LessonBasicSerializer,
+)
 
 
 class TeacherLessonViewSet(ModelViewSet):
     permission_classes = [IsTeacher]
 
     serializer_classes = {
-        'list': Serializer,
+        'list': LessonBasicSerializer,
         'create': Serializer,
         'retrieve': Serializer,
         'update': Serializer,
@@ -24,8 +28,8 @@ class TeacherLessonViewSet(ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes[self.action]
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
-        raise MethodNotAllowed(request.method)
+    def get_queryset(self):
+        return LessonsForTeacher.get_list()
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise MethodNotAllowed(request.method)
