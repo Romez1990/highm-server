@@ -20,7 +20,7 @@ from .serializers_for_student import (
     LessonBasicSerializer,
     LessonResultSerializer,
 )
-from .lessons import Lessons
+from .lessons import LessonsForStudent
 
 
 class LessonViewSet(ModelViewSet):
@@ -41,21 +41,21 @@ class LessonViewSet(ModelViewSet):
     def get_serializer_class(self):
         number = self.kwargs.get('number', None)
         if self.action == 'retrieve':
-            return Lessons.get_lesson_serializer_class(number)
+            return LessonsForStudent.get_lesson_serializer_class(number)
         if self.action == 'check':
-            return Lessons.get_lesson_answers_serializer_class(number)
+            return LessonsForStudent.get_lesson_answers_serializer_class(number)
         return self.serializer_classes[self.action]
 
     def get_queryset(self):
         user = self.request.user
         student = user.student
-        return Lessons.get_list(student)
+        return LessonsForStudent.get_list(student)
 
     def get_object(self):
         self.check_passed()
         number = self.kwargs['number']
         n = get_n(self.request)
-        return Lessons.get_lesson_or_404(number, n)
+        return LessonsForStudent.get_lesson_or_404(number, n)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise MethodNotAllowed(request.method)
@@ -75,7 +75,7 @@ class LessonViewSet(ModelViewSet):
         request_serializer = self.get_serializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         n = get_n(request)
-        lesson_answers = Lessons.get_answers_or_404(
+        lesson_answers = LessonsForStudent.get_answers_or_404(
             number, n, request_serializer.validated_data)
         lesson_answers.check()
         grade = lesson_answers.grade
@@ -98,7 +98,7 @@ class LessonViewSet(ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def result(self, request: Request, number: int) -> Response:
-        Lessons.lesson_exists_of_404(number)
+        LessonsForStudent.lesson_exists_of_404(number)
         self.check_not_passed()
         lesson_result = self.result_queryset().first()
         return self.response_lesson_result(lesson_result)

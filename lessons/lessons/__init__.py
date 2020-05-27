@@ -1,1 +1,1 @@
-from .lessons import Lessons
+from .lessons_for_student import LessonsForStudent

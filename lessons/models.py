@@ -26,9 +26,9 @@ class LessonResult(Model):
 
     @property
     def max_points(self) -> int:
-        from lessons.lessons import Lessons
+        from lessons.lessons import LessonsForStudent
         number = self.lesson_number
-        return Lessons.lesson_max_points(number)
+        return LessonsForStudent.lesson_max_points(number)
 
     class Meta:
         unique_together = ['student', 'lesson_number']
@@ -43,10 +43,10 @@ class TaskResult(Model):
 
     @property
     def max_points(self) -> int:
-        from lessons.lessons import Lessons
+        from lessons.lessons import LessonsForStudent
         lesson_number = self.lesson_result.lesson_number
         number = self.task_number
-        return Lessons.task_max_points(lesson_number, number)
+        return LessonsForStudent.task_max_points(lesson_number, number)
 
     class Meta:
         unique_together = ['lesson_result', 'task_number']
