@@ -44,7 +44,9 @@ class LessonViewSet(ModelViewSet):
         return self.serializer_classes[self.action]
 
     def get_queryset(self):
-        return Lessons.get_list()
+        user = self.request.user
+        student = user.student
+        return Lessons.get_list(student)
 
     def get_object(self):
         number = self.kwargs['number']
