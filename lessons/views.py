@@ -80,8 +80,15 @@ class LessonViewSet(ModelViewSet):
         lesson_answers.check()
         grade = lesson_answers.grade
         student = request.user.student
-        lesson_result = LessonResult.objects.create(
-            student=student, n=n, lesson_number=number, grade=grade)
+        result_queryset = self.result_queryset()
+        if result_queryset.exists():
+            lesson_result: LessonResult = result_queryset.first()
+            lesson_result.grade = grade
+            lesson_result.save(update_fields=['grade'])
+            TaskResult.objects.filter(lesson_result=lesson_result).delete()
+        else:
+            lesson_result = LessonResult.objects.create(
+                student=student, n=n, lesson_number=number, grade=grade)
         task_results = [
             TaskResult(lesson_result=lesson_result, task_number=task_number,
                        points=answer.points, answer=answer.to_json())
@@ -98,7 +105,7 @@ class LessonViewSet(ModelViewSet):
 
     def check_passed(self) -> None:
         result_queryset = self.result_queryset()
-        if result_queryset.exists():
+        if result_queryset.exists() and result_queryset.first().grade != 2:
             raise ValidationError({
                 'detail': 'Lesson has been passed.',
             })
