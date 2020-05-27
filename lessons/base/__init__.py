@@ -3,6 +3,7 @@ from .lesson import (
     LessonBasicBase,
     LessonBase,
 )
-from .task import (
-    TaskBase,
-)
+from .lesson_answers import LessonAnswersBase
+from .task import TaskBase
+from .answer import AnswerBase
+from .step import StepBase
