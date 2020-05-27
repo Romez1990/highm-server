@@ -1,5 +1,7 @@
 from os import getenv
-from typing import Union
+from typing import (
+    Union,
+)
 from dotenv import load_dotenv
 
 load_dotenv()
