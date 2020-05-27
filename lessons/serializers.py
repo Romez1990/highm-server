@@ -3,6 +3,7 @@ from rest_framework.serializers import (
     Serializer,
     CharField,
     IntegerField,
+    BooleanField,
     ListField,
 )
 
@@ -17,7 +18,7 @@ class LessonBasicSerializerBase(Serializer):
 
 
 class LessonBasicSerializer(LessonBasicSerializerBase):
-    pass
+    passed = BooleanField()
 
 
 class LessonSerializerBase(LessonBasicSerializerBase):

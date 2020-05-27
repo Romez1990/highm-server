@@ -11,6 +11,7 @@ from rest_framework.exceptions import (
     NotFound,
 )
 
+from users.models import Student
 from lessons.serializers import (
     LessonSerializerBase,
     LessonAnswersSerializerBase,
@@ -46,8 +47,9 @@ class Lessons:
     ]
 
     @staticmethod
-    def get_list() -> List[LessonBasicBase]:
-        return [lesson.LessonBasic() for lesson in Lessons._lessons]
+    def get_list(student: Student) -> List[LessonBasicBase]:
+        return [lesson.LessonBasic(number, student)
+                for number, lesson in enumerate(Lessons._lessons, 1)]
 
     @staticmethod
     def get_lesson(number: int, n: int) -> Optional[LessonBase]:
