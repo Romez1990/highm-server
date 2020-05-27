@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.exceptions import (
+    ValidationError,
     NotFound,
     MethodNotAllowed,
 )
@@ -51,6 +52,7 @@ class LessonViewSet(ModelViewSet):
         return Lessons.get_list(student)
 
     def get_object(self):
+        self.check_passed()
         number = self.kwargs['number']
         n = get_n(self.request)
         return Lessons.get_lesson_or_404(number, n)
@@ -69,6 +71,7 @@ class LessonViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def check(self, request: Request, number: int) -> Response:
+        self.check_passed()
         request_serializer = self.get_serializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         n = get_n(request)
@@ -89,8 +92,23 @@ class LessonViewSet(ModelViewSet):
     @action(detail=True, methods=['get'])
     def result(self, request: Request, number: int) -> Response:
         Lessons.lesson_exists_of_404(number)
+        self.check_not_passed()
         lesson_result = self.result_queryset().first()
         return self.response_lesson_result(lesson_result)
+
+    def check_passed(self) -> None:
+        result_queryset = self.result_queryset()
+        if result_queryset.exists():
+            raise ValidationError({
+                'detail': 'Lesson has been passed.',
+            })
+
+    def check_not_passed(self) -> None:
+        result_queryset = self.result_queryset()
+        if not result_queryset.exists():
+            raise ValidationError({
+                'detail': 'Lesson has not been passed.',
+            })
 
     def result_queryset(self) -> QuerySet:
         user = self.request.user
