@@ -1,4 +1,6 @@
-from typing import Type
+from typing import (
+    Type,
+)
 from django.http import Http404
 from rest_framework.generics import (
     GenericAPIView,
