@@ -47,6 +47,15 @@ class Lessons:
     ]
 
     @staticmethod
+    def lesson_exists(number: int) -> bool:
+        return 1 <= number <= len(Lessons._lessons)
+
+    @staticmethod
+    def lesson_exists_of_404(number: int) -> None:
+        if not Lessons.lesson_exists(number):
+            raise NotFound('Lesson not found.')
+
+    @staticmethod
     def get_list(student: Student) -> List[LessonBasicBase]:
         return [lesson.LessonBasic(number, student)
                 for number, lesson in enumerate(Lessons._lessons, 1)]
