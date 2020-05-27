@@ -73,6 +73,15 @@ class ProfileSerializer(ModelSerializer):
         return 'student'
 
 
+class StudentBasicSerializer(ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['first_name', 'last_name']
+
+    first_name = CharField(source='user.first_name', read_only=True)
+    last_name = CharField(source='user.last_name', read_only=True)
+
+
 class StudentSerializer(ModelSerializer, UserSerializerMixin):
     class Meta:
         model = Student
