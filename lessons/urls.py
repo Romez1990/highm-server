@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from highm_server.custom_lookup_type_router import CustomLookupTypeRouter
-from .views import (
+from .views_for_student import (
     LessonViewSet,
 )
 

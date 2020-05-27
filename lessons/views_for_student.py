@@ -16,7 +16,7 @@ from .models import (
     LessonResult,
     TaskResult,
 )
-from .serializers import (
+from .serializers_for_student import (
     LessonBasicSerializer,
     LessonResultSerializer,
 )

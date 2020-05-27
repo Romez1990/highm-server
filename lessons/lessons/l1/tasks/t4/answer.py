@@ -7,7 +7,7 @@ from rest_framework.fields import IntegerField
 from lessons.base import AnswerBase
 from lessons.utils.math import MatrixInt
 from lessons.utils.serializer import MatrixField
-from lessons.serializers import AnswerSerializerBase
+from lessons.serializers_for_student import AnswerSerializerBase
 from .task import Task4
 from .steps.s1 import Step1
 

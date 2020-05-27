@@ -4,7 +4,7 @@ from typing import (
 )
 from rest_framework.serializers import Serializer
 
-from lessons.serializers import LessonAnswersSerializerBase
+from lessons.serializers_for_student import LessonAnswersSerializerBase
 from lessons.base import LessonAnswersBase
 from .tasks.t1.answer import Answer1, Answer1Serializer
 from .tasks.t2.answer import Answer2, Answer2Serializer

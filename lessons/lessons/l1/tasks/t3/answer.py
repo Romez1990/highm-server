@@ -7,7 +7,7 @@ from rest_framework.fields import (
 )
 
 from lessons.base import AnswerBase
-from lessons.serializers import AnswerSerializerBase
+from lessons.serializers_for_student import AnswerSerializerBase
 from .task import Task3
 from .steps.s1 import Step1
 
