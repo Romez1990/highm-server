@@ -7,6 +7,7 @@ from .views_for_student import (
 )
 from .views_for_teacher import (
     TeacherLessonViewSet,
+    LessonResultViewSet,
 )
 
 router = CustomLookupTypeRouter()
@@ -16,8 +17,14 @@ teacher_lesson_router = SimpleRouter()
 teacher_lesson_router.register('lesson', TeacherLessonViewSet,
                                basename='teacher-lesson')
 
+statement_router = SimpleRouter()
+statement_router.register('result', LessonResultViewSet,
+                          basename='lesson-result')
+
 urlpatterns = [
     path('', include(router.urls)),
     path('teacher-panel/group/<str:group>/',
          include(teacher_lesson_router.urls)),
+    path('teacher-panel/group/<str:group>/lesson/<int:lesson>/',
+         include(statement_router.urls)),
 ]
