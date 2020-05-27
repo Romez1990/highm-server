@@ -1,9 +1,11 @@
+from django.db.models import QuerySet
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import Serializer
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.exceptions import (
+    NotFound,
     MethodNotAllowed,
 )
 
@@ -83,6 +85,19 @@ class LessonViewSet(ModelViewSet):
             for task_number, answer in enumerate(lesson_answers.answers, 1)]
         TaskResult.objects.bulk_create(task_results)
         return self.response_lesson_result(lesson_result)
+
+    @action(detail=True, methods=['get'])
+    def result(self, request: Request, number: int) -> Response:
+        Lessons.lesson_exists_of_404(number)
+        lesson_result = self.result_queryset().first()
+        return self.response_lesson_result(lesson_result)
+
+    def result_queryset(self) -> QuerySet:
+        user = self.request.user
+        student = user.student
+        number = self.kwargs['number']
+        return LessonResult.objects.filter(student=student,
+                                           lesson_number=number)
 
     def response_lesson_result(self, lesson_result: LessonResult) -> Response:
         self.action = 'result'
