@@ -2,7 +2,7 @@ from rest_framework.fields import CharField
 
 from lessons.base import TaskBase
 from lessons.utils.serializer import MatrixField
-from lessons.serializers import TaskSerializerBase
+from lessons.serializers_for_student import TaskSerializerBase
 
 
 class Task5Serializer(TaskSerializerBase):

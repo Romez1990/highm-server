@@ -5,7 +5,7 @@ from typing import (
 from rest_framework.fields import IntegerField
 
 from lessons.base import AnswerBase
-from lessons.serializers import AnswerSerializerBase
+from lessons.serializers_for_student import AnswerSerializerBase
 from .task import Task5
 from .steps.s1 import Step1
 

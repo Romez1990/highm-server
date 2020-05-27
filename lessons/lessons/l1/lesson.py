@@ -1,6 +1,6 @@
 from rest_framework.serializers import Serializer
 
-from lessons.serializers import LessonSerializerBase
+from lessons.serializers_for_student import LessonSerializerBase
 from lessons.base import (
     LessonBaseBase,
     LessonBasicBase,

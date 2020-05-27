@@ -12,7 +12,7 @@ from rest_framework.exceptions import (
 )
 
 from users.models import Student
-from lessons.serializers import (
+from lessons.serializers_for_student import (
     LessonSerializerBase,
     LessonAnswersSerializerBase,
 )

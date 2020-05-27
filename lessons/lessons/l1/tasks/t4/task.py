@@ -3,7 +3,7 @@ from rest_framework.fields import IntegerField
 from lessons.base import TaskBase
 from lessons.utils.math import number_to_expression
 from lessons.utils.serializer import MatrixField
-from lessons.serializers import TaskSerializerBase
+from lessons.serializers_for_student import TaskSerializerBase
 
 
 class Task4Serializer(TaskSerializerBase):
