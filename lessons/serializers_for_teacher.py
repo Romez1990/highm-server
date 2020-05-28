@@ -6,6 +6,7 @@ from rest_framework.serializers import (
 )
 
 from .models import (
+    TaskResult,
     LessonResult,
 )
 
@@ -20,3 +21,17 @@ class LessonResultSerializer(ModelSerializer):
         fields = ['id', 'student_id', 'n', 'grade', 'points', 'max_points']
 
     max_points = IntegerField()
+
+
+class TaskResultSerializer(ModelSerializer):
+    class Meta:
+        model = TaskResult
+        fields = ['points', 'max_points', 'answer']
+
+
+class LessonResultAnswersSerializer(ModelSerializer):
+    class Meta:
+        model = LessonResult
+        fields = ['task_results']
+
+    task_results = TaskResultSerializer(many=True)
