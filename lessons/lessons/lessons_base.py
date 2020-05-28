@@ -25,6 +25,15 @@ from .l1.lesson_answers import (
     Lesson1Answers,
     Lesson1AnswerSerializer,
 )
+from .l2.lesson import (
+    Lesson2Basic,
+    Lesson2,
+    Lesson2Serializer,
+)
+from .l2.lesson_answers import (
+    Lesson2Answers,
+    Lesson2AnswerSerializer,
+)
 
 
 class Lesson(NamedTuple):
@@ -39,6 +48,8 @@ class LessonsBase:
     _lessons: List[Lesson] = [
         Lesson(Lesson1Basic, Lesson1, Lesson1Serializer, Lesson1Answers,
                Lesson1AnswerSerializer),
+        Lesson(Lesson2Basic, Lesson2, Lesson2Serializer, Lesson2Answers,
+               Lesson2AnswerSerializer),
     ]
 
     @staticmethod
