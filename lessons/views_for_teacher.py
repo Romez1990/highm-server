@@ -17,7 +17,7 @@ from .lessons import LessonsForTeacher
 from .models import LessonResult
 from .serializers_for_teacher import (
     LessonBasicSerializer,
-    LessonResultSerializer,
+    LessonResultSerializer, LessonResultAnswersSerializer,
 )
 
 
@@ -58,7 +58,7 @@ class LessonResultViewSet(ModelViewSet):
     serializer_classes = {
         'list': LessonResultSerializer,
         'create': Serializer,
-        'retrieve': Serializer,
+        'retrieve': LessonResultAnswersSerializer,
         'update': Serializer,
         'partial_update': Serializer,
         'destroy': Serializer,
@@ -73,10 +73,12 @@ class LessonResultViewSet(ModelViewSet):
         return LessonResult.objects.filter(student__group=group,
                                            lesson_number=lesson)
 
-    def create(self, request: Request, *args, **kwargs) -> Response:
-        raise MethodNotAllowed(request.method)
+    def get_object(self) -> LessonResult:
+        queryset = self.get_queryset()
+        pk = self.kwargs['pk']
+        return queryset.get(pk=pk)
 
-    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args, **kwargs) -> Response:
         raise MethodNotAllowed(request.method)
 
     def update(self, request: Request, *args, **kwargs) -> Response:
