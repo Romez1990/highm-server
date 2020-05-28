@@ -1,37 +1,3 @@
-from django.db.models import (
-    Model,
-    ForeignKey,
-    CASCADE,
-    IntegerField,
-    FloatField,
-    BooleanField,
-)
-from django.contrib.postgres.fields import (
-    JSONField,
-)
+from django.db import models
 
-from users.models import (
-    Student,
-)
-
-
-class LessonResult(Model):
-    student = ForeignKey(Student, CASCADE)
-    lesson_number = IntegerField()
-    n = IntegerField()
-    percent_correct = IntegerField()
-    grade = FloatField()
-
-    class Meta:
-        unique_together = ['student', 'lesson_number']
-
-
-class TaskResult(Model):
-    lesson_result = ForeignKey(LessonResult, CASCADE,
-                               related_name='task_results')
-    task_number = IntegerField()
-    correct = BooleanField()
-    answer = JSONField()
-
-    class Meta:
-        unique_together = ['lesson_result', 'task_number']
+# Create your models here.
