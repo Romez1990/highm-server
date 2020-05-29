@@ -20,6 +20,7 @@ djangorestframework = "*"
 django-rest-auth = "*"
 django-allauth = "*"
 numpy = "*"
+scipy = "*"
 
 [dev-packages]
 pytest = "*"
