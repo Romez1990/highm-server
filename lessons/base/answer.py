@@ -14,11 +14,11 @@ if TYPE_CHECKING:
 
 class AnswerBase:
     _step_classes: List[Type[StepBase]]
-    _task_type: Type[TaskBase]
+    _task_class: Type[TaskBase]
 
     def __init__(self, n: int) -> None:
         self._n = n
-        self.task = self._task_type(n)
+        self.task = self._task_class(n)
         self._steps: List[StepBase] = []
 
     def check(self) -> None:

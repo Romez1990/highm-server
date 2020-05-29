@@ -17,7 +17,7 @@ class Answer4Serializer(AnswerSerializerBase):
 
 
 class Answer4(AnswerBase):
-    _task_type = Task4
+    _task_class = Task4
     _task: Task4
     _step_classes = [
         Step1,
