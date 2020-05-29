@@ -6,11 +6,16 @@ from typing import (
 from lessons.base import StepBase
 
 if TYPE_CHECKING:
+    from ..task import Task1
     from ..answer import Answer1
 
 
 class Step1(StepBase):
     max_points = 1
 
-    def _check(self, answer: Answer1) -> bool:
-        return answer.which_of_products == 'AB'
+    _task: Task1
+    _answer: Answer1
+
+    def _check(self) -> bool:
+        which_of_products = self._answer.which_of_products
+        return which_of_products == 'AB'

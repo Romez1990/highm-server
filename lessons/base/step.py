@@ -4,14 +4,16 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from lessons.base.answer import AnswerBase
+    from lessons.base.answer import TaskBase, AnswerBase
 
 
 class StepBase:
     max_points: int
 
-    def __init__(self, answer: AnswerBase) -> None:
-        self.points = self.max_points if self._check(answer) else 0
+    def __init__(self, task: TaskBase, answer: AnswerBase) -> None:
+        self._task = task
+        self._answer = answer
+        self.points = self.max_points if self._check() else 0
 
-    def _check(self, answer: AnswerBase) -> bool:
+    def _check(self) -> bool:
         raise NotImplementedError

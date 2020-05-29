@@ -23,7 +23,6 @@ class Answer1Serializer(AnswerSerializerBase):
 
 class Answer1(AnswerBase):
     _task_class = Task1
-    task: Task1
     _step_classes = [
         Step1,
         Step2,
