@@ -34,6 +34,15 @@ from .l2.lesson_answers import (
     Lesson2Answers,
     Lesson2AnswerSerializer,
 )
+from .l3.lesson import (
+    Lesson3Basic,
+    Lesson3,
+    Lesson3Serializer,
+)
+from .l3.lesson_answers import (
+    Lesson3Answers,
+    Lesson3AnswerSerializer,
+)
 
 
 class Lesson(NamedTuple):
@@ -50,6 +59,8 @@ class LessonsBase:
                Lesson1AnswerSerializer),
         Lesson(Lesson2Basic, Lesson2, Lesson2Serializer, Lesson2Answers,
                Lesson2AnswerSerializer),
+        Lesson(Lesson3Basic, Lesson3, Lesson3Serializer, Lesson3Answers,
+               Lesson3AnswerSerializer),
     ]
 
     @staticmethod
