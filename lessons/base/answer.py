@@ -18,11 +18,12 @@ class AnswerBase:
 
     def __init__(self, n: int) -> None:
         self._n = n
-        self.task = self._task_class(n)
+        self._task = self._task_class(n)
         self._steps: List[StepBase] = []
 
     def check(self) -> None:
-        self._steps = [step(self) for step in self._step_classes]
+        task = self._task
+        self._steps = [step(task, self) for step in self._step_classes]
 
     @property
     def points(self) -> int:

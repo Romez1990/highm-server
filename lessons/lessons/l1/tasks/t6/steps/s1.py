@@ -8,13 +8,21 @@ from numpy.linalg import det
 from lessons.base import StepBase
 
 if TYPE_CHECKING:
+    from ..task import Task6
     from ..answer import Answer6
 
 
 class Step1(StepBase):
     max_points = 3
 
-    def _check(self, answer: Answer6) -> bool:
-        a = array(answer.task.matrix_a)
-        determinant = det(a)
-        return answer.determinant == int(round(determinant))
+    _task: Task6
+    _answer: Answer6
+
+    def _check(self) -> bool:
+        answered_determinant = self._answer.determinant
+
+        matrix_a = self._task.matrix_a
+
+        a = array(matrix_a)
+        determinant = round(det(a))
+        return answered_determinant == determinant
