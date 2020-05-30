@@ -91,7 +91,7 @@ class LessonResultViewSet(ModelViewSet):
         user = self.request.user
         queryset = Group.objects
         if not user.is_superuser:
-            queryset = queryset.exclude(student__group__name=GROUP_ADMINS)
+            queryset = queryset.exclude(name=GROUP_ADMINS)
 
         group = self.kwargs['group']
         queryset = queryset.filter(name=group)
