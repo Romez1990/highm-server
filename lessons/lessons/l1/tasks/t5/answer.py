@@ -2,7 +2,7 @@ from typing import (
     Dict,
     Any,
 )
-from rest_framework.fields import IntegerField
+from rest_framework.serializers import IntegerField
 
 from lessons.base import AnswerBase
 from lessons.serializers_for_student import AnswerSerializerBase

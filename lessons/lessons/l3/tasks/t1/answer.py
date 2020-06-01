@@ -2,7 +2,7 @@ from typing import (
     Dict,
     Any,
 )
-from rest_framework.fields import (
+from rest_framework.serializers import (
     FloatField,
 )
 

@@ -1,4 +1,4 @@
-from rest_framework.fields import CharField
+from rest_framework.serializers import CharField
 
 from lessons.base import TaskBase
 from lessons.utils.serializer import MatrixField
