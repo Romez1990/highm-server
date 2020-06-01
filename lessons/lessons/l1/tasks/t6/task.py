@@ -1,4 +1,6 @@
-from rest_framework.serializers import IntegerField
+from rest_framework.serializers import (
+    IntegerField,
+)
 
 from lessons.base import TaskBase
 from lessons.utils.math import MatrixInt
