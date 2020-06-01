@@ -1,5 +1,5 @@
 from typing import List
-from rest_framework.fields import IntegerField, ListField
+from rest_framework.serializers import IntegerField, ListField
 
 from lessons.base import TaskBase
 from lessons.utils.math import MatrixInt
