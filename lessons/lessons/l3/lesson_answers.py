@@ -2,7 +2,9 @@ from typing import (
     Mapping,
     Any,
 )
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import (
+    Serializer,
+)
 
 from lessons.serializers_for_student import LessonAnswersSerializerBase
 from lessons.base import LessonAnswersBase

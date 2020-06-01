@@ -6,7 +6,9 @@ from rest_framework.generics import (
     GenericAPIView,
     RetrieveUpdateAPIView,
 )
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import (
+    Serializer,
+)
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import ValidationError, MethodNotAllowed
 from rest_framework.request import Request

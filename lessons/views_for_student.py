@@ -1,6 +1,8 @@
 from django.db.models import QuerySet
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import (
+    Serializer,
+)
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response

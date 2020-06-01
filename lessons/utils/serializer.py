@@ -1,4 +1,7 @@
-from rest_framework.serializers import ListField, Field
+from rest_framework.serializers import (
+    ListField,
+    Field,
+)
 
 
 class MatrixField:
