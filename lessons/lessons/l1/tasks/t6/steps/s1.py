@@ -1,28 +1,5 @@
-from __future__ import annotations
-from typing import (
-    TYPE_CHECKING,
-)
-from numpy import array
-from numpy.linalg import det
-
-from lessons.base import StepBase
-
-if TYPE_CHECKING:
-    from ..task import Task6
-    from ..answer import Answer6
+from ...t3.steps.s1 import Step1 as Task3Step1
 
 
-class Step1(StepBase):
+class Step1(Task3Step1):
     max_points = 3
-
-    _task: Task6
-    _answer: Answer6
-
-    def _check(self) -> bool:
-        answered_determinant = self._answer.determinant
-
-        matrix_a = self._task.matrix_a
-
-        a = array(matrix_a)
-        determinant = round(det(a))
-        return answered_determinant == determinant

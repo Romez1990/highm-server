@@ -1,18 +1,12 @@
-from rest_framework.serializers import (
-    IntegerField,
-)
-
-from lessons.base import TaskBase
 from lessons.utils.math import MatrixInt
-from lessons.utils.serializer import MatrixField
-from lessons.serializers_for_student import TaskSerializerBase
+from ..t3.task import Task3Serializer, Task3
 
 
-class Task6Serializer(TaskSerializerBase):
-    matrix_a = MatrixField(child=IntegerField())
+class Task6Serializer(Task3Serializer):
+    pass
 
 
-class Task6(TaskBase):
+class Task6(Task3):
     text = 'Вычислить определитель матрицы четвёртого порядка:'
 
     @property
