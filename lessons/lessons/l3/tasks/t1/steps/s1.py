@@ -32,6 +32,6 @@ class Step1(StepBase):
             return self.max_points
         if round(x, tolerance - 1) == round(answered_x, tolerance - 1):
             return self.max_points - 1
-        if round(x, tolerance - 2) == round(answered_x, tolerance - 2):
+        if round(x, tolerance - 3) == round(answered_x, tolerance - 3):
             return self.max_points - 2
         return 0
