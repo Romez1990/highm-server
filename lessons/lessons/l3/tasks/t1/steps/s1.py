@@ -1,8 +1,8 @@
 from __future__ import annotations
-from math import fabs, cos
 from typing import (
     TYPE_CHECKING,
 )
+from numpy import round
 from scipy.optimize import bisect
 
 from lessons.base import StepBase
@@ -13,23 +13,25 @@ if TYPE_CHECKING:
 
 
 class Step1(StepBase):
-    max_points = 1
+    max_points = 3
 
     _task: Task1
     _answer: Answer1
 
-    def _check(self) -> bool:
+    def _check(self) -> int:
         answered_x = self._answer.x
 
-        coefficient = self._task.coefficient
+        f = self._task.equation
         a = self._task.a
         b = self._task.b
         epsilon = self._task.epsilon
+        tolerance = self._task.tolerance
 
-        f = self._f
-        x: float = bisect(f, a, b, args=(coefficient,))
-        accuracy = fabs(x - answered_x)
-        return accuracy <= epsilon
-
-    def _f(self, x: float, coefficient: float) -> float:
-        return coefficient * cos(x) - x ** 2
+        x: float = bisect(f, a, b, xtol=epsilon)
+        if round(x, tolerance) == round(answered_x, tolerance):
+            return self.max_points
+        if round(x, tolerance - 1) == round(answered_x, tolerance - 1):
+            return self.max_points - 1
+        if round(x, tolerance - 2) == round(answered_x, tolerance - 2):
+            return self.max_points - 2
+        return 0

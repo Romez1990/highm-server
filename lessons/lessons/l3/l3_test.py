@@ -2,7 +2,7 @@ def test_check():
     from lessons.lessons.l3.lesson_answers import Lesson3Answers
     answers = {
         'answer1': {
-            'x': 0.978,
+            'x': 0.977913,
         },
     }
     lesson_answers = Lesson3Answers(n=1, **answers)
@@ -14,7 +14,7 @@ def test_check_fail():
     from lessons.lessons.l3.lesson_answers import Lesson3Answers
     answers = {
         'answer1': {
-            'x': 99.978,
+            'x': 99.977913,
         },
     }
     lesson_answers = Lesson3Answers(n=1, **answers)

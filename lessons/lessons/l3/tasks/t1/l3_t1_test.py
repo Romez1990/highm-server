@@ -1,7 +1,7 @@
 def test_check():
     from lessons.lessons.l3.tasks.t1.answer import Answer1
     answers = {
-        'x': 0.978,
+        'x': 0.977913,
     }
     answer = Answer1(n=1, **answers)
     answer.check()
@@ -11,7 +11,7 @@ def test_check():
 def test_check_fail():
     from lessons.lessons.l3.tasks.t1.answer import Answer1
     answers = {
-        'x': 99.978,
+        'x': 99.977913,
     }
     answer = Answer1(n=1, **answers)
     answer.check()

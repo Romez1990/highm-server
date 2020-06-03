@@ -1,17 +1,19 @@
-from math import pi
 from rest_framework.serializers import (
     CharField,
+    IntegerField,
 )
+from numpy import pi, cos
 
 from lessons.base import TaskBase
 from lessons.serializers_for_student import TaskSerializerBase
 
 
 class Task1Serializer(TaskSerializerBase):
-    equation = CharField()
+    equation = CharField(source='equation_formula')
     a = CharField(source='a_formula')
     b = CharField(source='b_formula')
     epsilon = CharField(source='epsilon_formula')
+    tolerance = IntegerField()
 
 
 class Task1(TaskBase):
@@ -24,8 +26,12 @@ class Task1(TaskBase):
         n = self.n
         return 0.21 * n + 1.5
 
+    def equation(self, x: float) -> float:
+        coefficient = self.coefficient
+        return coefficient * cos(x) - x ** 2
+
     @property
-    def equation(self) -> str:
+    def equation_formula(self) -> str:
         coefficient = self.coefficient
         return fr'{coefficient}\cos x - x^2 = 0'
 
@@ -35,5 +41,7 @@ class Task1(TaskBase):
     a_formula = r'\frac{\pi}{4}'
     b_formula = r'\frac{\pi}{2}'
 
-    epsilon = 10 ** -3
+    epsilon = 1.e-3
     epsilon_formula = '10^{-3}'
+
+    tolerance = 6  # decimal places
