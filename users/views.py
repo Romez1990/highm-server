@@ -38,6 +38,7 @@ from .permissions import (
     IsAuthenticated,
     IsTeacher,
     IsAdmin,
+    IsOwner,
 )
 
 
@@ -100,7 +101,8 @@ class RegistrableModelViewSet(ModelViewSet):
 
 
 class StudentViewSet(RegistrableModelViewSet):
-    permission_classes = [IsTeacher]
+    permission_classes = [IsTeacher,
+                          IsOwner(lambda student: student.group.teacher.user)]
     serializer_class_registered = StudentSerializer
     serializer_class_unregistered = UnregisteredStudentSerializer
 
@@ -109,14 +111,16 @@ class StudentViewSet(RegistrableModelViewSet):
         queryset = Student.objects
         if user.is_superuser:
             return queryset
-        return queryset.exclude(group__name=GROUP_ADMINS)
+        return queryset.filter(group__teacher__user=user) \
+            .exclude(group__name=GROUP_ADMINS)
 
     def get_queryset_unregistered(self):
         user = self.request.user
         queryset = UnregisteredUser.objects.filter(is_staff=False)
         if user.is_superuser:
             return queryset
-        return queryset.exclude(group__name=GROUP_ADMINS)
+        return queryset.filter(group__teacher__user=user)\
+            .exclude(group__name=GROUP_ADMINS)
 
 
 class TeacherViewSet(RegistrableModelViewSet):
@@ -132,7 +136,7 @@ class TeacherViewSet(RegistrableModelViewSet):
 
 
 class GroupViewSet(ModelViewSet):
-    permission_classes = [IsTeacher]
+    permission_classes = [IsTeacher, IsOwner(lambda group: group.teacher.user)]
     lookup_field = 'name'
     lookup_value_regex = '.+'
     serializer_classes = {
@@ -148,10 +152,11 @@ class GroupViewSet(ModelViewSet):
         return self.serializer_classes[self.action]
 
     def get_queryset(self):
+        user = self.request.user
         queryset = Group.objects
         if self.request.user.is_superuser:
             return queryset
-        return queryset.exclude(name=GROUP_ADMINS)
+        return queryset.filter(teacher__user=user).exclude(name=GROUP_ADMINS)
 
     def destroy(self, *args, **kwargs) -> Response:
         group = self.get_object()

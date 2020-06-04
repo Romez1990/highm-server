@@ -7,6 +7,7 @@ from rest_framework.serializers import (
     DateTimeField,
     ListField,
     SerializerMethodField,
+    HiddenField,
 )
 from rest_framework.exceptions import ValidationError
 from rest_auth.models import TokenModel
@@ -23,6 +24,7 @@ from .models import (
     Teacher,
     UnregisteredUser,
 )
+from .fields import CurrentTeacherDefault
 from .validators import registration_code_validator
 
 
@@ -211,14 +213,16 @@ class GroupBasicSerializer(ModelSerializer):
 class GroupCreateSerializer(ModelSerializer):
     class Meta:
         model = Group
-        fields = ['name', 'students']
+        fields = ['teacher', 'name', 'students']
 
+    teacher = HiddenField(default=CurrentTeacherDefault())
     students = ListField(
         child=UnregisteredUserBasicSerializer(), max_length=50,
         required=False)
 
     def create(self, validated_data):
         group = super().create({
+            'teacher': validated_data['teacher'],
             'name': validated_data['name'],
         })
         if 'students' in validated_data:
