@@ -43,6 +43,7 @@ GROUP_ADMINS = 'admins'
 class Group(Model):
     name = CharField(verbose_name='Name', max_length=30, unique=True,
                      validators=[group_name_validator])
+    teacher = ForeignKey(Teacher, on_delete=PROTECT, related_name='groups')
     created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
