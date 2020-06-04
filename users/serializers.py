@@ -222,15 +222,11 @@ class GroupCreateSerializer(ModelSerializer):
             'name': validated_data['name'],
         })
         if 'students' in validated_data:
-            def create_registration_code(registration_code):
-                registration_code = UnregisteredUser(**registration_code,
-                                                     group=group,
-                                                     is_staff=False)
-                return registration_code
-
-            registration_codes = map(create_registration_code,
-                                     validated_data['students'])
-            UnregisteredUser.objects.bulk_create(registration_codes)
+            UnregisteredUser.objects.bulk_create([
+                UnregisteredUser(**registration_code, group=group,
+                                 is_staff=False).generate_code()
+                for registration_code in validated_data['students']
+            ])
         return validated_data
 
 
