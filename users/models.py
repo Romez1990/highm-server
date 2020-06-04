@@ -29,6 +29,13 @@ class Profile(Model):
                f'{self.user.last_name}'
 
 
+class Teacher(Model):
+    user = OneToOneField(User, on_delete=CASCADE, primary_key=True)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
+
+
 GROUP_ADMINS = 'admins'
 
 
@@ -61,13 +68,6 @@ class Student(Model):
             if last_name == self.user.last_name and \
                     first_name == self.user.first_name:
                 return number
-
-    def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}'
-
-
-class Teacher(Model):
-    user = OneToOneField(User, on_delete=CASCADE, primary_key=True)
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
