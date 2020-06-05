@@ -64,8 +64,8 @@ class Student(Model):
                                                 'user__last_name')
         unregistered_users = self.group.unregistered_students.values_list(
             'first_name', 'last_name')
-        # it's already ordered
-        all_users = users.union(unregistered_users)
+        all_users = users.union(unregistered_users)\
+            .order_by('user__last_name', 'user__first_name')
         for number, (first_name, last_name) in enumerate(all_users, 1):
             if last_name == self.user.last_name and \
                     first_name == self.user.first_name:
