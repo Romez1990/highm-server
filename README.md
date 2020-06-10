@@ -61,3 +61,12 @@ To run production server
 ```shell script
 pipenv run gunicorn highm_server.wsgi
 ```
+
+## Built With
+- [Django](https://www.djangoproject.com) - The web framework
+- [Django REST Framework](https://www.django-rest-framework.org) - Toolkit for
+  building RESTful APIs
+- [PostgreSQL](https://www.postgresql.org) - The open source relational database
+- [NumPy](https://numpy.org) - Library for matrices and high-level mathematical
+  functions
+- [SciPy](https://www.scipy.org) - Library for scientific computing
