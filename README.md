@@ -43,3 +43,15 @@ row to account_emailaddress with corresponding email.
 
 You can also login to Django REST Framework panel with username and password
 only in development mode
+
+## Automated testing
+To run all the automated tests
+```shell script
+pipenv run test
+```
+
+### Unit tests
+Unit tests test every module individually
+```shell script
+pipenv run unit-test
+```
