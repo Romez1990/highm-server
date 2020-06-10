@@ -55,3 +55,9 @@ Unit tests test every module individually
 ```shell script
 pipenv run unit-test
 ```
+
+## Deploying
+To run production server
+```shell script
+pipenv run gunicorn highm_server.wsgi
+```
