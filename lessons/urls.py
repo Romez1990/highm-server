@@ -7,6 +7,7 @@ from .views_for_student import (
 )
 from .views_for_teacher import (
     TeacherLessonViewSet,
+    GroupStatementViewSet,
     LessonResultViewSet,
 )
 
@@ -16,6 +17,8 @@ root_router.register('lesson', LessonViewSet, basename='lesson')
 group_router = SimpleRouter()
 group_router.register('lesson', TeacherLessonViewSet,
                       basename='teacher-lesson')
+group_router.register('statement', GroupStatementViewSet,
+                      basename='group-statement')
 
 lesson_router = SimpleRouter()
 lesson_router.register('result', LessonResultViewSet,

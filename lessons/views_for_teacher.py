@@ -19,6 +19,7 @@ from .lessons import LessonsForTeacher
 from .models import LessonResult
 from .serializers_for_teacher import (
     LessonBasicSerializer,
+    GroupStatementSerializer,
     LessonResultSerializer,
     LessonResultAnswersSerializer,
 )
@@ -53,6 +54,55 @@ class TeacherLessonViewSet(ModelViewSet):
 
     def destroy(self, request: Request, *args, **kwargs) -> Response:
         raise MethodNotAllowed(request.method)
+
+
+class GroupStatementViewSet(ModelViewSet):
+    permission_classes = [IsTeacher]
+
+    serializer_classes = {
+        'list': GroupStatementSerializer,
+        'create': Serializer,
+        'retrieve': Serializer,
+        'update': Serializer,
+        'partial_update': Serializer,
+        'destroy': Serializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes[self.action]
+
+    def get_queryset(self):
+        return Group.objects.none()
+
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        group = self.get_group()
+        serializer = self.get_serializer(group)
+        return Response(serializer.data['students'])
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def update(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def destroy(self, request: Request, *args, **kwargs) -> Response:
+        raise MethodNotAllowed(request.method)
+
+    def get_group(self) -> Group:
+        user = self.request.user
+        queryset = Group.objects
+        if not user.is_superuser:
+            queryset = queryset.exclude(name=GROUP_ADMINS)
+
+        group = self.kwargs['group']
+        queryset = queryset.filter(name=group)
+
+        if not queryset.exists():
+            raise NotFound('Group not found.')
+        return queryset.first()
 
 
 class LessonResultViewSet(ModelViewSet):
