@@ -19,7 +19,8 @@ from .lessons import LessonsForTeacher
 from .models import LessonResult
 from .serializers_for_teacher import (
     LessonBasicSerializer,
-    LessonResultSerializer, LessonResultAnswersSerializer,
+    LessonResultSerializer,
+    LessonResultAnswersSerializer,
 )
 
 
