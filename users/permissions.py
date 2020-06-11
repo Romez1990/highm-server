@@ -1,4 +1,13 @@
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from typing import Callable
+from django.db.models import Model
+from rest_framework.views import APIView
+from rest_framework.permissions import (
+    BasePermission,
+    IsAuthenticated,
+)
+from rest_framework.request import Request
+
+from users.models import User
 
 
 class IsAdmin(BasePermission):
@@ -21,14 +30,11 @@ class IsStudent(BasePermission):
 
 
 class IsOwner:
-    def __new__(cls, owner_field: str):
-        class Permission(BasePermission):
-            def has_object_permission(self, request, view, obj):
-                if request.user.is_superuser:
-                    return True
-                if not hasattr(obj, owner_field):
-                    raise ValueError(f'Owner field {owner_field} not found')
-                own_it = request.user == getattr(obj, owner_field)
-                return request.user.is_authenticated and own_it
+    def __new__(cls, get_object_owner: Callable[[Model], User]):
+        class IsOwnerPermission(BasePermission):
+            def has_object_permission(self, request: Request, view: APIView,
+                                      obj: Model) -> bool:
+                return request.user.is_superuser or \
+                       request.user == get_object_owner(obj)
 
-        return Permission
+        return IsOwnerPermission
