@@ -10,21 +10,20 @@ from .views_for_teacher import (
     LessonResultViewSet,
 )
 
-router = CustomLookupTypeRouter()
-router.register('lesson', LessonViewSet, basename='lesson')
+root_router = CustomLookupTypeRouter()
+root_router.register('lesson', LessonViewSet, basename='lesson')
 
-teacher_lesson_router = SimpleRouter()
-teacher_lesson_router.register('lesson', TeacherLessonViewSet,
-                               basename='teacher-lesson')
+group_router = SimpleRouter()
+group_router.register('lesson', TeacherLessonViewSet,
+                      basename='teacher-lesson')
 
-statement_router = SimpleRouter()
-statement_router.register('result', LessonResultViewSet,
-                          basename='lesson-result')
+lesson_router = SimpleRouter()
+lesson_router.register('result', LessonResultViewSet,
+                       basename='lesson-result')
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('teacher-panel/group/<str:group>/',
-         include(teacher_lesson_router.urls)),
+    path('', include(root_router.urls)),
+    path('teacher-panel/group/<str:group>/', include(group_router.urls)),
     path('teacher-panel/group/<str:group>/lesson/<int:lesson>/',
-         include(statement_router.urls)),
+         include(lesson_router.urls)),
 ]
