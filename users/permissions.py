@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import (
     BasePermission,
     IsAuthenticated,
+    SAFE_METHODS,
 )
 from rest_framework.request import Request
 
@@ -29,12 +30,13 @@ class IsStudent(BasePermission):
         return request.user.is_authenticated and not request.user.is_staff
 
 
-class IsOwner:
+class IsOwnerOrReadOnly:
     def __new__(cls, get_object_owner: Callable[[Model], User]):
-        class IsOwnerPermission(BasePermission):
+        class IsOwnerOrReadOnlyPermission(BasePermission):
             def has_object_permission(self, request: Request, view: APIView,
                                       obj: Model) -> bool:
                 return request.user.is_superuser or \
+                       request.method in SAFE_METHODS or \
                        request.user == get_object_owner(obj)
 
-        return IsOwnerPermission
+        return IsOwnerOrReadOnlyPermission
