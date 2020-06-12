@@ -11,8 +11,7 @@ from django.db.models import (
     PROTECT,
 )
 from django.contrib.auth import get_user_model
-
-from users.validators import group_name_validator
+from django.core.validators import RegexValidator
 
 User = get_user_model()
 
@@ -39,6 +38,10 @@ class Teacher(Model):
 
 GROUP_ADMINS = 'admins'
 
+group_name_validator = RegexValidator(
+    r'^[1-4][\u0410-\u044f]{2,4}-\d{1,2}\u0430?\.\d{2}$',
+    'Group name does not match rules.')
+
 
 class Group(Model):
     name = CharField(verbose_name='Name', max_length=30, unique=True,
@@ -64,7 +67,7 @@ class Student(Model):
                                                 'user__last_name')
         unregistered_users = self.group.unregistered_students.values_list(
             'first_name', 'last_name')
-        all_users = users.union(unregistered_users)\
+        all_users = users.union(unregistered_users) \
             .order_by('user__last_name', 'user__first_name')
         for number, (first_name, last_name) in enumerate(all_users, 1):
             if last_name == self.user.last_name and \

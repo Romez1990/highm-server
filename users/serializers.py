@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from rest_framework.serializers import (
     Serializer,
     ModelSerializer,
@@ -25,7 +26,6 @@ from .models import (
     UnregisteredUser,
 )
 from .fields import CurrentTeacherDefault
-from .validators import registration_code_validator
 
 
 class UserSerializerMixin(Serializer):
@@ -246,6 +246,10 @@ class GroupSerializer(ModelSerializer):
         unregistered = UnregisteredUserBasicSerializer(
             group.unregistered_students, many=True).data
         return registered + unregistered
+
+
+registration_code_validator = RegexValidator(r'^c\d{6}$',
+                                             'Wrong registration code.')
 
 
 class RegistrationCodeCheckSerializer(Serializer):
