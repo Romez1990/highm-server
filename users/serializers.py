@@ -159,8 +159,9 @@ class UnregisteredStudentSerializer(ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        group_name = validated_data.pop('group', {}).pop('name', None)
-        instance.group = self.get_group(group_name)
+        if 'group' in validated_data:
+            group_name = validated_data.pop('group', {}).pop('name', None)
+            instance.group = self.get_group(group_name)
         return super().update(instance, validated_data)
 
     def get_group(self, group_name):
