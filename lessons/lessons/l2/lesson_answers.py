@@ -40,6 +40,7 @@ class Lesson2Answers(LessonAnswersBase):
         }
 
     grades_and_minimal_points = [
-        (5, 2),
-        (4, 1),
+        (5, 5),
+        (4, 4),
+        (3, 3),
     ]

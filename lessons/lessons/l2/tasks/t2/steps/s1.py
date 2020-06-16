@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class Step1(StepBase):
-    max_points = 1
+    max_points = 3
 
     _task: Task2
     _answer: Answer2
