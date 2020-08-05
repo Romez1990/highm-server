@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from .env import env
+from .env import env, env_bool, env_int
 
 BASE_DIR = Path(__file__).parent.parent
 
 SECRET_KEY = '+jk5sg&s$ibowvurgiq^h0*$f_wjpa$s3h2e28yzw8%wpr^t-^'
 
-DEBUG = env('DEBUG', bool)
+DEBUG = env_bool('DEBUG')
 
 ALLOWED_HOSTS = [] if DEBUG else [env('HOST')]
 
@@ -148,7 +148,7 @@ ACCOUNT_ADAPTER = 'users.account_adapter.AccountAdapter'
 
 
 EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = int(env('EMAIL_PORT'))
+EMAIL_PORT = env_int('EMAIL_PORT')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS', bool)
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS')
