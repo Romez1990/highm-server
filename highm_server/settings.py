@@ -10,7 +10,7 @@ DEBUG = env_bool('DEBUG')
 
 ALLOWED_HOSTS = [] if DEBUG else [env('HOST')]
 
-CORS_ORIGIN_WHITELIST = [env('CLIENT_URL')]
+CORS_ORIGIN_WHITELIST = [env('CLIENT_ORIGIN')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
